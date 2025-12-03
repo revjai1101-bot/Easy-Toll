@@ -6,8 +6,8 @@ body {
   min-height: 100vh;
 }
 
-main { 
-  padding: 12px; 
+main {
+  padding: 12px;
   max-width: 600px;
   margin: 0 auto;
 }
@@ -22,6 +22,8 @@ main {
 .brand h1 { font-size: 28px; }
 .brand p { font-size: 14px; opacity: 0.8; }
 
+.ad-block { margin: 15px 0; }
+
 .search-input {
   width: 100%; padding: 14px;
   margin: 14px 0;
@@ -31,16 +33,13 @@ main {
   font-size: 16px;
   outline: none;
 }
-.search-input::placeholder {
-  color: rgba(255,255,255,0.6);
-}
+.search-input::placeholder { color: rgba(255,255,255,0.6); }
 
-/******** TOOL CARDS ********/
+/******** CARDS ********/
 .tools {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
   gap: 14px;
-  padding: 10px 0;
 }
 
 .tool-card {
@@ -49,15 +48,13 @@ main {
   padding: 22px 10px;
   text-align: center;
   font-size: 30px;
-  border: 2px solid transparent;
   transition: .25s ease;
   cursor: pointer;
 }
 
 .tool-card:hover {
   transform: translateY(-4px);
-  border-color: #fff;
-  box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+  background: rgba(255,255,255,0.32);
 }
 
 .tool-card p {
@@ -70,11 +67,11 @@ main {
 .tool-panel {
   position: fixed;
   inset: 0;
-  background: #ffffff;
+  background: #fff;
   color: #222;
   padding: 20px;
   overflow-y: auto;
-  z-index: 10;
+  z-index: 20;
   display: none;
 }
 
@@ -87,7 +84,7 @@ main {
   cursor: pointer;
 }
 
-/******** FAVORITES ROW ********/
+/******** FAVORITES ********/
 .currency-select-row {
   display: flex;
   gap: 10px;
@@ -101,12 +98,6 @@ main {
   padding: 10px 12px;
   cursor: pointer;
   font-size: 20px;
-  transition: 0.2s;
-}
-
-.fav-btn.active {
-  background: orange;
-  transform: scale(1.1);
 }
 
 input, select {
@@ -128,13 +119,10 @@ button {
   cursor: pointer;
 }
 
-button:hover { opacity: 0.9; }
-
 .result-text {
   margin-top: 15px;
   padding: 10px;
   font-size: 16px;
-  font-weight: 600;
   color: #111;
   border-left: 5px solid #6a11cb;
   background: #f0f8ff;
@@ -153,7 +141,6 @@ button:hover { opacity: 0.9; }
   background: #fff;
   border-radius: 12px;
   overflow: hidden;
-  margin-top: 10px;
   border: 1px solid #eee;
 }
 
@@ -169,16 +156,16 @@ button:hover { opacity: 0.9; }
   text-align: left;
 }
 
-.rates-table th:last-child,
-.rates-table td:last-child {
-  text-align: right;
-}
-
 .rates-table td {
   padding: 12px;
   border-bottom: 1px solid #eee;
 }
 
-.rates-table tr:nth-child(even) {
-  background: #f8f3ff;
+.footer {
+  text-align:center;
+  padding:20px;
+  opacity:0.7;
+  margin-top:40px;
 }
+
+.footer a { color:#fff; text-decoration:underline; }
