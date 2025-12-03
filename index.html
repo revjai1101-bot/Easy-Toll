@@ -7,7 +7,7 @@
 
   <meta name="description" content="Toolify Hub provides free smart tools including currency converter, unit converter, age calculator, password generator, QR code generator, and image resizer. Fast, simple, accurate, and free.">
 
-  <!-- Single AdSense Global Script (Important: only once) -->
+  <!-- Single AdSense Global Script -->
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6408441237069178"
   crossorigin="anonymous"></script>
 
@@ -154,7 +154,8 @@
 
     <input type="text" id="qr-input" placeholder="Enter text or URL">
     <button onclick="generateQR()">Generate</button>
-    <div id="qr-result"></div>
+    <div id="qr-result" class="qr-box"></div>
+    <button id="qr-download" class="download-btn" style="display:none;">Download QR</button>
   </section>
 
   <!-- Age Calculator -->
@@ -173,6 +174,7 @@
       <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
     </div>
 
+    <label for="birthdate">Enter Birth Date:</label>
     <input type="date" id="birthdate">
     <button onclick="calculateAge()">Calculate</button>
     <p id="age-result" class="result-text"></p>
@@ -202,12 +204,17 @@
     <button onclick="resizeAndDisplayImage()">Resize</button>
     <p id="image-result-text" class="result-text"></p>
     <div id="image-result-display"></div>
+    <button id="img-download" class="download-btn" style="display:none;">Download Image</button>
   </section>
 
 </main>
 
 <footer class="footer">
   <p>© 2025 Toolify Hub — Smart Tools for Everyone</p>
+  <p>
+    <a href="privacy.html">Privacy Policy</a> •
+    <a href="terms.html">Terms &amp; Conditions</a>
+  </p>
 </footer>
 
 <script src="script.js"></script>
