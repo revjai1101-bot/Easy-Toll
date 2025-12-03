@@ -1,191 +1,263 @@
-// ================= CORE UI =================
+/* ============================================================
+   GLOBAL PANEL HANDLING
+   ============================================================ */
+
 function showTool(id) {
-  document.querySelectorAll(".tool-panel").forEach(e => e.style.display = "none");
-  document.getElementById(id).style.display = "block";
+    document.querySelectorAll(".tool-panel").forEach(p => p.style.display = "none");
+    document.getElementById(id).style.display = "block";
+    window.scrollTo(0, 0);
 }
 
 function goBack() {
-  document.querySelectorAll(".tool-panel").forEach(e => e.style.display = "none");
+    document.querySelectorAll(".tool-panel").forEach(p => p.style.display = "none");
 }
 
-// ================= SEARCH =================
-document.getElementById('tool-search').addEventListener('keyup', function() {
-  const query = this.value.toLowerCase();
-  document.querySelectorAll('.tool-card').forEach(card => {
-    const toolName = card.querySelector('p').textContent.toLowerCase();
-    card.style.display = toolName.includes(query) ? 'block' : 'none';
-  });
+/* ============================================================
+   SEARCH TOOL
+   ============================================================ */
+
+document.getElementById("tool-search").addEventListener("input", function () {
+    const q = this.value.toLowerCase();
+    document.querySelectorAll(".tool-card").forEach(card => {
+        card.style.display = card.innerText.toLowerCase().includes(q) ? "block" : "none";
+    });
 });
 
-// ================= CURRENCY =================
-let ratesData = {};
+/* ============================================================
+   CURRENCY CONVERTER
+   ============================================================ */
 
-// Top 50 currencies commonly used worldwide
-const majorCurrencies = [
-  "USD","EUR","GBP","JPY","SGD","CNY","HKD","AUD","CAD","CHF",
-  "NZD","SEK","NOK","DKK","INR","THB","IDR","PHP","KRW","MYR",
-  "VND","AED","SAR","QAR","KWD","BHD","TRY","ZAR","BRL","MXN",
-  "RUB","PLN","CZK","HUF","ILS","TWD","ARS","CLP","COP","PEN",
-  "EGP","NGN","KES","GHS","PKR","BDT","NPR","LKR","OMR","UYU"
+// Top 50 currencies list
+const topCurrencies = [
+    "USD","EUR","GBP","JPY","AUD","CAD","SGD","CHF","THB","IDR","CNY","HKD","NZD","SAR",
+    "AED","INR","KRW","PHP","VND","BDT","PKR","MMK","BRL","ZAR","SEK","NOK","DKK","PLN",
+    "TRY","HUF","EGP","QAR","KWD","BHD","OMR","LKR","NPR","KES","RUB","MXN","ARS","NGN",
+    "COP","CLP","CZK","RON","ILS","MAD","MYR"
 ];
 
-// Full dropdown list (big list)
-const currencyList = {
-  'USD':'United States Dollar (USD)','EUR':'Euro (EUR)','JPY':'Japanese Yen (JPY)','GBP':'British Pound (GBP)',
-  'AUD':'Australian Dollar (AUD)','CAD':'Canadian Dollar (CAD)','CHF':'Swiss Franc (CHF)','CNY':'Chinese Yuan (CNY)',
-  'HKD':'Hong Kong Dollar (HKD)','NZD':'New Zealand Dollar (NZD)','SGD':'Singapore Dollar (SGD)','KRW':'Korean Won (KRW)',
-  'SEK':'Swedish Krona (SEK)','NOK':'Norwegian Krone (NOK)','MXN':'Mexican Peso (MXN)','INR':'Indian Rupee (INR)',
-  'BRL':'Brazilian Real (BRL)','ZAR':'South African Rand (ZAR)','RUB':'Russian Ruble (RUB)','TRY':'Turkish Lira (TRY)',
-  'AED':'UAE Dirham (AED)','SAR':'Saudi Riyal (SAR)','THB':'Thai Baht (THB)','IDR':'Indonesian Rupiah (IDR)',
-  'MYR':'Malaysian Ringgit (MYR)','PHP':'Philippine Peso (PHP)','VND':'Vietnamese Dong (VND)','DKK':'Danish Krone (DKK)',
-  'PLN':'Polish Zloty (PLN)','HUF':'Hungarian Forint (HUF)','CZK':'Czech Koruna (CZK)','ILS':'Israeli New Shekel (ILS)',
-  'CLP':'Chilean Peso (CLP)','COP':'Colombian Peso (COP)','PEN':'Peruvian Sol (PEN)','EGP':'Egyptian Pound (EGP)',
-  'KWD':'Kuwaiti Dinar (KWD)','QAR':'Qatari Riyal (QAR)','PKR':'Pakistani Rupee (PKR)','BDT':'Bangladesh Taka (BDT)',
-  'NPR':'Nepalese Rupee (NPR)','LKR':'Sri Lankan Rupee (LKR)','KES':'Kenyan Shilling (KES)','NGN':'Nigerian Naira (NGN)'
+const fromCurrency = document.getElementById("fromCurrency");
+const toCurrency = document.getElementById("toCurrency");
+const currencyResult = document.getElementById("currencyResult");
+
+// Fill dropdowns
+topCurrencies.forEach(cur => {
+    fromCurrency.innerHTML += `<option value="${cur}">${cur}</option>`;
+    toCurrency.innerHTML += `<option value="${cur}">${cur}</option>`;
+});
+fromCurrency.value = "MYR";
+toCurrency.value = "USD";
+
+document.getElementById("convertBtn").addEventListener("click", convertCurrency);
+
+// Exchange API (Vercel endpoint)
+async function convertCurrency() {
+    let amount = document.getElementById("amount").value;
+    if (!amount) return currencyResult.innerText = "Enter amount first.";
+
+    try {
+        const res = await fetch(`/api/exchange?base=${fromCurrency.value}`);
+        const data = await res.json();
+
+        if (!data.conversion_rates) {
+            currencyResult.innerText = "Error loading currency rates.";
+            return;
+        }
+
+        const rate = data.conversion_rates[toCurrency.value];
+        const converted = amount * rate;
+
+        currencyResult.innerText =
+            `${amount} ${fromCurrency.value} = ${converted.toFixed(2)} ${toCurrency.value}`;
+
+    } catch (e) {
+        currencyResult.innerText = "Failed — check internet or API.";
+    }
+}
+
+/* ============================================================
+   MONEY CHANGER RATE TABLE (MYR BASE)
+   ============================================================ */
+
+async function loadMYRTable() {
+    const ratesBody = document.getElementById("ratesBody");
+    try {
+        const res = await fetch(`/api/exchange?base=MYR`);
+        const data = await res.json();
+
+        ratesBody.innerHTML = "";
+        topCurrencies.forEach(cur => {
+            if (!data.conversion_rates[cur]) return;
+
+            const rate = data.conversion_rates[cur];
+            ratesBody.innerHTML += `
+                <tr>
+                    <td>${cur}</td>
+                    <td style="text-align:right">${rate.toFixed(4)}</td>
+                </tr>`;
+        });
+    } catch (e) {
+        ratesBody.innerHTML = `<tr><td colspan="2">Failed to load…</td></tr>`;
+    }
+}
+
+loadMYRTable();
+
+/* ============================================================
+   UNIT CONVERTER (FULL WORKING)
+   ============================================================ */
+
+const unitCategory = document.getElementById("unit-category");
+const unitFrom = document.getElementById("unit-from");
+const unitTo = document.getElementById("unit-to");
+const unitValue = document.getElementById("unit-value");
+const unitResult = document.getElementById("unit-result");
+
+// All units
+const units = {
+    length: {
+        m: 1, cm: 100, mm: 1000, km: 0.001,
+        inch: 39.3701, ft: 3.28084, yard: 1.09361
+    },
+    weight: {
+        kg: 1, g: 1000, mg: 1000000, lb: 2.20462, oz: 35.274
+    },
+    temperature: "special",
+    speed: {
+        "m/s": 1, "km/h": 3.6, "mph": 2.23694, "km/s": 0.001
+    }
 };
 
-// ----------------- USE VERCEL SERVERLESS API -----------------
-const API_URL = "/api/exchange";
+// Populate dropdowns
+function loadUnits() {
+    const cat = unitCategory.value;
+    unitFrom.innerHTML = "";
+    unitTo.innerHTML = "";
 
-// Fetch currency rates
-async function fetchCurrencyRates() {
-  const ratesBody = document.getElementById("ratesBody");
-  const currencyResult = document.getElementById("currencyResult");
-
-  try {
-    ratesBody.innerHTML = '<tr><td colspan="2">Fetching live rates...</td></tr>';
-
-    const res = await fetch(API_URL);
-    const data = await res.json();
-
-    if (data.result === "success") {
-      ratesData = data.conversion_rates;
-      currencyResult.innerText = "Rates updated live via API.";
-    } else {
-      throw new Error("Invalid API response");
+    if (cat === "temperature") {
+        ["Celsius", "Fahrenheit", "Kelvin"].forEach(u => {
+            unitFrom.innerHTML += `<option>${u}</option>`;
+            unitTo.innerHTML += `<option>${u}</option>`;
+        });
+        return;
     }
 
-  } catch (error) {
-    console.warn("API fetch failed:", error);
-    currencyResult.innerText = "Using offline/fallback currency rates.";
-  }
-
-  populateDropdowns();
-  populateRatesTable();
+    Object.keys(units[cat]).forEach(u => {
+        unitFrom.innerHTML += `<option value="${u}">${u}</option>`;
+        unitTo.innerHTML += `<option value="${u}">${u}</option>`;
+    });
 }
 
-function populateDropdowns() {
-  const from = document.getElementById("fromCurrency");
-  const to = document.getElementById("toCurrency");
+unitCategory.addEventListener("change", loadUnits);
+loadUnits(); // initial load
 
-  from.innerHTML = "";
-  to.innerHTML = "";
+// Convert
+function convertUnit() {
+    const cat = unitCategory.value;
+    const from = unitFrom.value;
+    const to = unitTo.value;
+    const value = parseFloat(unitValue.value);
 
-  Object.keys(currencyList).sort().forEach(code => {
-    from.add(new Option(currencyList[code], code));
-    to.add(new Option(currencyList[code], code));
-  });
+    if (isNaN(value)) {
+        unitResult.innerText = "Enter a number.";
+        return;
+    }
 
-  from.value = "MYR";
-  to.value = "USD";
+    if (cat === "temperature") {
+        let kelvin;
+
+        // Convert to Kelvin
+        if (from === "Celsius") kelvin = value + 273.15;
+        else if (from === "Fahrenheit") kelvin = (value - 32) * 5/9 + 273.15;
+        else kelvin = value;
+
+        let final;
+        if (to === "Celsius") final = kelvin - 273.15;
+        else if (to === "Fahrenheit") final = (kelvin - 273.15) * 9/5 + 32;
+        else final = kelvin;
+
+        unitResult.innerText = `${value} ${from} = ${final.toFixed(2)} ${to}`;
+        return;
+    }
+
+    // Normal conversion
+    const base = value / units[cat][from];
+    const final = base * units[cat][to];
+
+    unitResult.innerText = `${value} ${from} = ${final.toFixed(4)} ${to}`;
 }
 
-document.getElementById("convertBtn").onclick = () => {
-  const amount = parseFloat(document.getElementById("amount").value);
-  const from = document.getElementById("fromCurrency").value;
-  const to = document.getElementById("toCurrency").value;
-  const resultElem = document.getElementById("currencyResult");
-
-  if (isNaN(amount) || amount <= 0) {
-    resultElem.innerText = "Please enter a valid amount.";
-    return;
-  }
-
-  if (!ratesData[from] || !ratesData[to]) {
-    resultElem.innerText = "Rate unavailable at the moment.";
-    return;
-  }
-
-  const result = amount * (ratesData[to] / ratesData[from]);
-  resultElem.innerText = `${amount.toFixed(2)} ${from} = ${result.toFixed(2)} ${to}`;
-};
-
-// Table
-function populateRatesTable() {
-  const tbody = document.getElementById("ratesBody");
-  tbody.innerHTML = "";
-
-  majorCurrencies.forEach(code => {
-    if (!ratesData[code] || code === "MYR") return;
-
-    const row = document.createElement("tr");
-    row.innerHTML = `
-      <td>${code}</td>
-      <td>${ratesData[code].toFixed(4)}</td>
-    `;
-    tbody.appendChild(row);
-  });
-}
-
-// ================= UNIT, PASSWORD, QR, AGE, IMAGE TOOLS =================
-// (UNCHANGED – your existing working tools remain here)
+/* ============================================================
+   PASSWORD GENERATOR
+   ============================================================ */
 
 function generatePassword() {
-  const length = parseInt(document.getElementById("password-length").value) || 12;
-  const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()_+";
-  let pass = "";
-  for (let i = 0; i < length; i++) {
-    pass += chars[Math.floor(Math.random() * chars.length)];
-  }
-  document.getElementById("password-result").innerText = pass;
+    const len = document.getElementById("password-length").value;
+    const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*";
+    let pass = "";
+
+    for (let i = 0; i < len; i++) {
+        pass += chars.charAt(Math.floor(Math.random() * chars.length));
+    }
+
+    document.getElementById("password-result").innerText = pass;
 }
+
+/* ============================================================
+   QR GENERATOR
+   ============================================================ */
 
 function generateQR() {
-  const text = document.getElementById("qr-input").value;
-  const qrResultDiv = document.getElementById("qr-result");
-
-  if (!text) {
-    qrResultDiv.innerHTML = "<p>Please enter text or a URL.</p>";
-    return;
-  }
-
-  const apiUrl = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(text)}`;
-  qrResultDiv.innerHTML = `<img src="${apiUrl}" alt="QR Code">`;
+    const text = document.getElementById("qr-input").value;
+    document.getElementById("qr-result").innerHTML =
+        `<img src="https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=${encodeURIComponent(text)}" />`;
 }
+
+/* ============================================================
+   AGE CALCULATOR
+   ============================================================ */
 
 function calculateAge() {
-  const dobInput = document.getElementById("birthdate").value;
-  const resultElem = document.getElementById("age-result");
+    const birth = new Date(document.getElementById("birthdate").value);
+    if (!birth) return;
 
-  if (!dobInput) {
-    resultElem.innerText = "Please select your birthdate.";
-    return;
-  }
+    const diff = Date.now() - birth.getTime();
+    const age = new Date(diff).getUTCFullYear() - 1970;
 
-  const dob = new Date(dobInput);
-  const today = new Date();
-
-  if (dob > today) {
-    resultElem.innerText = "Please select a valid past date.";
-    return;
-  }
-
-  let age = today.getFullYear() - dob.getFullYear();
-  let months = today.getMonth() - dob.getMonth();
-  let days = today.getDate() - dob.getDate();
-
-  if (days < 0) {
-    months--;
-    days += new Date(today.getFullYear(), today.getMonth(), 0).getDate();
-  }
-  if (months < 0) {
-    months += 12;
-  }
-
-  resultElem.innerText = `${age} years old\n(${months} months and ${days} days until next birthday)`;
+    document.getElementById("age-result").innerText = `Age: ${age} years`;
 }
 
-// ================= INIT =================
-document.addEventListener("DOMContentLoaded", () => {
-  fetchCurrencyRates();
-});
+/* ============================================================
+   IMAGE RESIZER
+   ============================================================ */
+
+function resizeAndDisplayImage() {
+    const file = document.getElementById("image-upload").files[0];
+    if (!file) return alert("Upload image first.");
+
+    const w = parseInt(document.getElementById("resize-width").value);
+    const h = parseInt(document.getElementById("resize-height").value);
+
+    const reader = new FileReader();
+    reader.onload = function (e) {
+
+        const img = new Image();
+        img.onload = function () {
+            const canvas = document.createElement("canvas");
+            canvas.width = w;
+            canvas.height = h;
+
+            const ctx = canvas.getContext("2d");
+            ctx.drawImage(img, 0, 0, w, h);
+
+            const resizedURL = canvas.toDataURL("image/jpeg");
+
+            document.getElementById("image-result-display").innerHTML =
+                `<img src="${resizedURL}" style="max-width:100%; border-radius:10px; margin-top:10px;">`;
+
+            document.getElementById("image-result-text").innerText = "Image resized successfully!";
+        };
+        img.src = e.target.result;
+    };
+
+    reader.readAsDataURL(file);
+}
