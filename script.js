@@ -27,6 +27,8 @@ document.getElementById("tool-search").addEventListener("input", function () {
    CURRENCY CONVERTER + FAVORITES
    ============================================================ */
 
+const API_BASE = "https://www.easytoolilfy.com/api/exchange?base=";
+
 const topCurrencies = [
     "USD","EUR","GBP","JPY","AUD","CAD","SGD","CHF","THB","IDR","CNY","HKD","NZD","SAR",
     "AED","INR","KRW","PHP","VND","BDT","PKR","MMK","BRL","ZAR","SEK","NOK","DKK","PLN",
@@ -38,21 +40,19 @@ const fromCurrency = document.getElementById("fromCurrency");
 const toCurrency = document.getElementById("toCurrency");
 const currencyResult = document.getElementById("currencyResult");
 
-/* ===== FAVORITES STORED IN LOCALSTORAGE ===== */
+/* ===== FAVORITES ===== */
 let favFrom = JSON.parse(localStorage.getItem("fav_from")) || [];
 let favTo = JSON.parse(localStorage.getItem("fav_to")) || [];
 
-/* ===== BUILD DROPDOWNS WITH FAVORITES ON TOP ===== */
+/* ===== BUILD DROPDOWNS ===== */
 function buildCurrencyDropdowns() {
     function buildOptions(favorites, target) {
         target.innerHTML = "";
 
-        // FAV FIRST
         favorites.forEach(f => {
             target.innerHTML += `<option value="${f}">⭐ ${f}</option>`;
         });
 
-        // NORMAL AFTER
         topCurrencies.forEach(cur => {
             if (!favorites.includes(cur)) {
                 target.innerHTML += `<option value="${cur}">${cur}</option>`;
@@ -69,9 +69,10 @@ function buildCurrencyDropdowns() {
 
 buildCurrencyDropdowns();
 
-/* ====== SAVE FAVORITE BUTTONS ====== */
+/* ===== FAVORITE BUTTONS ===== */
 document.getElementById("favFromBtn").addEventListener("click", () => {
     const cur = fromCurrency.value;
+
     if (!favFrom.includes(cur)) favFrom.push(cur);
     else favFrom = favFrom.filter(c => c !== cur);
 
@@ -81,6 +82,7 @@ document.getElementById("favFromBtn").addEventListener("click", () => {
 
 document.getElementById("favToBtn").addEventListener("click", () => {
     const cur = toCurrency.value;
+
     if (!favTo.includes(cur)) favTo.push(cur);
     else favTo = favTo.filter(c => c !== cur);
 
@@ -88,16 +90,16 @@ document.getElementById("favToBtn").addEventListener("click", () => {
     buildCurrencyDropdowns();
 });
 
-/* ====== CONVERT CURRENCY ====== */
+/* ===== CONVERT CURRENCY ===== */
 
 document.getElementById("convertBtn").addEventListener("click", convertCurrency);
 
 async function convertCurrency() {
     let amount = document.getElementById("amount").value;
-    if (!amount) return (currencyResult.innerText = "Enter amount first.");
+    if (!amount) return currencyResult.innerText = "Enter amount first.";
 
     try {
-        const res = await fetch(`/api/exchange?base=${fromCurrency.value}`);
+        const res = await fetch(API_BASE + fromCurrency.value);
         const data = await res.json();
 
         if (!data.conversion_rates) {
@@ -117,14 +119,14 @@ async function convertCurrency() {
 }
 
 /* ============================================================
-   LIVE MONEY CHANGER TABLE (AUTO UPDATE)
+   LIVE MONEY CHANGER TABLE — FULL FIXED VERSION
    ============================================================ */
 
 async function loadMYRTable() {
     const ratesBody = document.getElementById("ratesBody");
 
     try {
-        const res = await fetch(`/api/exchange?base=MYR`);
+        const res = await fetch(API_BASE + "MYR");
         const data = await res.json();
 
         ratesBody.innerHTML = "";
@@ -144,7 +146,7 @@ async function loadMYRTable() {
     }
 }
 
-/* AUTO UPDATE EVERY 5 MINUTES */
+/* AUTO REFRESH EVERY 5 MINUTES */
 loadMYRTable();
 setInterval(loadMYRTable, 5 * 60 * 1000);
 
