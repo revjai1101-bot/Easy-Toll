@@ -1,9 +1,15 @@
-* { margin: 0; padding: 0; box-sizing: border-box; font-family: Inter, sans-serif; }
+* { 
+  margin: 0; 
+  padding: 0; 
+  box-sizing: border-box; 
+  font-family: Inter, sans-serif; 
+}
 
 body {
   background: linear-gradient(160deg, #6a11cb, #2575fc);
   color: #fff;
   min-height: 100vh;
+  overflow-x: hidden;
 }
 
 main {
@@ -71,6 +77,7 @@ main {
   color: #222;
   padding: 20px;
   overflow-y: auto;
+  overscroll-behavior: contain; /* prevents scroll jump */
   z-index: 20;
   display: none;
 }
@@ -90,35 +97,25 @@ main {
   gap: 10px;
   align-items: center;
   position: relative;
-}
-
-.currency-select-row select {
-  position: relative;
-  z-index: 50; /* ensure dropdown opens over everything */
-}
-
-.tool-panel {
-  overflow: visible; /* allow dropdown to extend out */
+  padding-bottom: 30px; /* space for dropdown */
 }
 
 select {
-  width: 100%; padding: 12px;
+  width: 100%; 
+  padding: 12px;
   margin: 8px 0;
   border-radius: 8px;
   border: 1px solid #ddd;
   font-size: 16px;
+  color: #000;
   background: #fff;
-  color: #111;
-  appearance: none; /* prevent default styling */
+  appearance: none;
+  position: relative;
+  z-index: 50;
 }
 
 select:focus {
   outline: 2px solid #6a11cb;
-}
-
-/* extra space under selects to avoid dropdown clipping */
-.currency-select-row {
-  padding-bottom: 50px;
 }
 
 /******** INPUTS + BUTTON ********/
@@ -128,12 +125,15 @@ input {
   border-radius: 8px;
   border: 1px solid #ddd;
   font-size: 16px;
+  color: #000;
+  background: #fff;
 }
 
 button {
   width: 100%; padding: 14px;
   margin-top: 15px;
-  border: none; color: #fff;
+  border: none; 
+  color: #fff;
   font-weight: 700;
   font-size: 17px;
   border-radius: 12px;
@@ -191,4 +191,7 @@ button {
   margin-top:40px;
 }
 
-.footer a { color:#fff; text-decoration:underline; }
+.footer a { 
+  color:#fff; 
+  text-decoration:underline; 
+}
