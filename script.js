@@ -31,15 +31,96 @@ document.querySelectorAll("select").forEach(sel => {
   sel.addEventListener("change", () => document.body.style.overflow = "");
 });
 
-/* ===== Tools ===== */
-document.getElementById("convertBtn").addEventListener("click", () =>
-  document.getElementById("currencyResult").innerText = "Live rates disabled"
-);
+/* ===========================================================
+   CURRENCY CONVERTER — DROPDOWNS + FAVORITES RESTORED
+============================================================== */
+
+const topCurrencies = [
+  "USD","EUR","GBP","JPY","AUD","CAD","SGD","CHF","THB","IDR","CNY","HKD","NZD","SAR",
+  "AED","INR","KRW","PHP","VND","BDT","PKR","MMK","BRL","ZAR","SEK","NOK","DKK","PLN",
+  "TRY","HUF","EGP","QAR","KWD","BHD","OMR","LKR","NPR","KES","RUB","MXN","ARS","NGN",
+  "COP","CLP","CZK","RON","ILS","MAD","MYR"
+];
+
+const fromCurrency = document.getElementById("fromCurrency");
+const toCurrency = document.getElementById("toCurrency");
+
+let favFrom = JSON.parse(localStorage.getItem("fav_from")) || [];
+let favTo = JSON.parse(localStorage.getItem("fav_to")) || [];
+
+function buildCurrencyDropdowns() {
+  function buildOptions(favs, target) {
+    target.innerHTML = "";
+    favs.forEach(f => target.innerHTML += `<option value="${f}">⭐ ${f}</option>`);
+    topCurrencies.forEach(cur => {
+      if (!favs.includes(cur)) target.innerHTML += `<option value="${cur}">${cur}</option>`;
+    });
+  }
+  buildOptions(favFrom, fromCurrency);
+  buildOptions(favTo, toCurrency);
+}
+buildCurrencyDropdowns();
+
+document.getElementById("favFromBtn").addEventListener("click", () => {
+  const cur = fromCurrency.value;
+  if (!favFrom.includes(cur)) favFrom.push(cur);
+  else favFrom = favFrom.filter(x => x !== cur);
+  localStorage.setItem("fav_from", JSON.stringify(favFrom));
+  buildCurrencyDropdowns();
+});
+
+document.getElementById("favToBtn").addEventListener("click", () => {
+  const cur = toCurrency.value;
+  if (!favTo.includes(cur)) favTo.push(cur);
+  else favTo = favTo.filter(x => x !== cur);
+  localStorage.setItem("fav_to", JSON.stringify(favTo));
+  buildCurrencyDropdowns();
+});
+
+document.getElementById("convertBtn").addEventListener("click", () => {
+  document.getElementById("currencyResult").innerText = "Live rates disabled";
+});
+
+/* ===========================================================
+   UNIT CONVERTER — RESTORED
+============================================================== */
+const unitCategory = document.getElementById("unit-category");
+const unitFrom = document.getElementById("unit-from");
+const unitTo = document.getElementById("unit-to");
+
+const units = {
+  length: { m: 1, cm: 100, mm: 1000, km: 0.001, inch: 39.37, ft: 3.28 },
+  weight: { kg: 1, g: 1000, mg: 1000000, lb: 2.2, oz: 35.27 },
+  temperature: "special",
+  speed: { "m/s": 1, "km/h": 3.6, mph: 2.23 }
+};
+
+function loadUnits() {
+  const cat = unitCategory.value;
+  unitFrom.innerHTML = "";
+  unitTo.innerHTML = "";
+
+  if (cat === "temperature") {
+    ["Celsius", "Fahrenheit", "Kelvin"].forEach(u => {
+      unitFrom.innerHTML += `<option>${u}</option>`;
+      unitTo.innerHTML += `<option>${u}</option>`;
+    });
+    return;
+  }
+
+  Object.keys(units[cat]).forEach(u => {
+    unitFrom.innerHTML += `<option value="${u}">${u}</option>`;
+    unitTo.innerHTML += `<option value="${u}">${u}</option>`;
+  });
+}
+unitCategory.addEventListener("change", loadUnits);
+loadUnits();
 
 function convertUnit() {
   document.getElementById("unit-result").innerText = "Converted!";
 }
 
+/* PASS, QR, AGE, IMAGE remain unchanged */
 function generatePassword() {
   const len = document.getElementById("password-length").value;
   const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*";
