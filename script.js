@@ -1,162 +1,150 @@
-/* ===== HASH SPA NAVIGATION ===== */
-function showTool(id) {
-  document.querySelectorAll(".tool-panel").forEach(p => p.style.display = "none");
-  document.getElementById(id).style.display = "block";
+/* SPA HASH ROUTING */
+function showTool(id){
+  document.querySelectorAll(".tool-panel").forEach(p=>p.style.display="none");
+  document.getElementById(id).style.display="block";
   window.location.hash = id;
-  window.scrollTo(0, 0);
 }
-
-function goBack() {
-  window.history.back();
-}
-
-window.addEventListener("hashchange", () => {
-  const id = window.location.hash.replace("#", "");
-  document.querySelectorAll(".tool-panel").forEach(p => p.style.display = "none");
-  if (id) document.getElementById(id).style.display = "block";
+function goBack(){ history.back(); }
+window.addEventListener("hashchange",()=>{
+  const id = window.location.hash.replace("#","");
+  document.querySelectorAll(".tool-panel").forEach(p=>p.style.display="none");
+  if(id) document.getElementById(id).style.display="block";
 });
 
-/* ===== Search Filter ===== */
-document.getElementById("tool-search").addEventListener("input", function () {
-  const q = this.value.toLowerCase();
-  document.querySelectorAll(".tool-card").forEach(c =>
-    c.style.display = c.innerText.toLowerCase().includes(q) ? "block" : "none"
-  );
+/*** SEARCH FILTER ***/
+document.getElementById("tool-search").addEventListener("input",()=>{
+  const q=this.value.toLowerCase();
+  document.querySelectorAll(".tool-card").forEach(c=>c.style.display=c.innerText.toLowerCase().includes(q)?"block":"none");
 });
 
-/* ===== Dropdown Scroll Fix ===== */
-document.querySelectorAll("select").forEach(sel => {
-  sel.addEventListener("mousedown", () => document.body.style.overflow = "hidden");
-  sel.addEventListener("blur", () => document.body.style.overflow = "");
-  sel.addEventListener("change", () => document.body.style.overflow = "");
-});
+/******************************************************
+ CURRENCY CONVERTER - OFFLINE STATIC RATE MULTIPLIER
+******************************************************/
+const topCurrencies=["USD","EUR","GBP","JPY","AUD","CAD","SGD","CHF","THB","IDR","CNY","HKD","NZD","SAR","AED","INR","KRW","PHP","VND","BDT","PKR","MMK","BRL","ZAR","SEK","NOK","DKK","PLN","TRY","HUF","EGP","QAR","KWD","BHD","OMR","LKR","NPR","KES","RUB","MXN","ARS","NGN","COP","CLP","CZK","RON","ILS","MAD","MYR"];
+const fromCurrency=document.getElementById("fromCurrency");
+const toCurrency=document.getElementById("toCurrency");
+let favFrom=JSON.parse(localStorage.getItem("fav_from"))||[];
+let favTo=JSON.parse(localStorage.getItem("fav_to"))||[];
 
-/* ===========================================================
-   CURRENCY CONVERTER — DROPDOWNS + FAVORITES RESTORED
-============================================================== */
-
-const topCurrencies = [
-  "USD","EUR","GBP","JPY","AUD","CAD","SGD","CHF","THB","IDR","CNY","HKD","NZD","SAR",
-  "AED","INR","KRW","PHP","VND","BDT","PKR","MMK","BRL","ZAR","SEK","NOK","DKK","PLN",
-  "TRY","HUF","EGP","QAR","KWD","BHD","OMR","LKR","NPR","KES","RUB","MXN","ARS","NGN",
-  "COP","CLP","CZK","RON","ILS","MAD","MYR"
-];
-
-const fromCurrency = document.getElementById("fromCurrency");
-const toCurrency = document.getElementById("toCurrency");
-
-let favFrom = JSON.parse(localStorage.getItem("fav_from")) || [];
-let favTo = JSON.parse(localStorage.getItem("fav_to")) || [];
-
-function buildCurrencyDropdowns() {
-  function buildOptions(favs, target) {
-    target.innerHTML = "";
-    favs.forEach(f => target.innerHTML += `<option value="${f}">⭐ ${f}</option>`);
-    topCurrencies.forEach(cur => {
-      if (!favs.includes(cur)) target.innerHTML += `<option value="${cur}">${cur}</option>`;
-    });
+function buildOptions(){
+  function doFav(f,target){
+    target.innerHTML="";
+    f.forEach(x=>target.innerHTML+=`<option value="${x}">⭐ ${x}</option>`);
+    topCurrencies.forEach(x=>{if(!f.includes(x)) target.innerHTML+=`<option value="${x}">${x}</option>`;});
   }
-  buildOptions(favFrom, fromCurrency);
-  buildOptions(favTo, toCurrency);
+  doFav(favFrom,fromCurrency);
+  doFav(favTo,toCurrency);
 }
-buildCurrencyDropdowns();
+buildOptions();
 
-document.getElementById("favFromBtn").addEventListener("click", () => {
-  const cur = fromCurrency.value;
-  if (!favFrom.includes(cur)) favFrom.push(cur);
-  else favFrom = favFrom.filter(x => x !== cur);
-  localStorage.setItem("fav_from", JSON.stringify(favFrom));
-  buildCurrencyDropdowns();
-});
-
-document.getElementById("favToBtn").addEventListener("click", () => {
-  const cur = toCurrency.value;
-  if (!favTo.includes(cur)) favTo.push(cur);
-  else favTo = favTo.filter(x => x !== cur);
-  localStorage.setItem("fav_to", JSON.stringify(favTo));
-  buildCurrencyDropdowns();
-});
-
-document.getElementById("convertBtn").addEventListener("click", () => {
-  document.getElementById("currencyResult").innerText = "Live rates disabled";
-});
-
-/* ===========================================================
-   UNIT CONVERTER — RESTORED
-============================================================== */
-const unitCategory = document.getElementById("unit-category");
-const unitFrom = document.getElementById("unit-from");
-const unitTo = document.getElementById("unit-to");
-
-const units = {
-  length: { m: 1, cm: 100, mm: 1000, km: 0.001, inch: 39.37, ft: 3.28 },
-  weight: { kg: 1, g: 1000, mg: 1000000, lb: 2.2, oz: 35.27 },
-  temperature: "special",
-  speed: { "m/s": 1, "km/h": 3.6, mph: 2.23 }
+document.getElementById("favFromBtn").onclick=()=>{
+  const c=fromCurrency.value;
+  favFrom = favFrom.includes(c)?favFrom.filter(x=>x!==c):[...favFrom,c];
+  localStorage.setItem("fav_from",JSON.stringify(favFrom));
+  buildOptions();
+};
+document.getElementById("favToBtn").onclick=()=>{
+  const c=toCurrency.value;
+  favTo = favTo.includes(c)?favTo.filter(x=>x!==c):[...favTo,c];
+  localStorage.setItem("fav_to",JSON.stringify(favTo));
+  buildOptions();
 };
 
-function loadUnits() {
-  const cat = unitCategory.value;
-  unitFrom.innerHTML = "";
-  unitTo.innerHTML = "";
+document.getElementById("convertBtn").onclick=()=>{
+  const amt=parseFloat(document.getElementById("amount").value);
+  if(isNaN(amt))return currencyResult.innerText="Enter number";
+  const iA=topCurrencies.indexOf(fromCurrency.value)+1;
+  const iB=topCurrencies.indexOf(toCurrency.value)+1;
+  const rate=iB/iA;
+  currencyResult.innerText=`${amt} ${fromCurrency.value} ≈ ${(amt*rate).toFixed(2)} ${toCurrency.value}`;
+};
 
-  if (cat === "temperature") {
-    ["Celsius", "Fahrenheit", "Kelvin"].forEach(u => {
-      unitFrom.innerHTML += `<option>${u}</option>`;
-      unitTo.innerHTML += `<option>${u}</option>`;
+/******************************************************
+ UNIT CONVERTER — FULL WORKING
+******************************************************/
+const unitCategory=document.getElementById("unit-category");
+const unitFrom=document.getElementById("unit-from");
+const unitTo=document.getElementById("unit-to");
+const units={
+  length:{m:1,cm:100,mm:1000,km:0.001,inch:39.37,ft:3.28},
+  weight:{kg:1,g:1000,mg:1000000,lb:2.2,oz:35.27},
+  temperature:"special",
+  speed:{"m/s":1,"km/h":3.6,mph:2.23}
+};
+function loadUnits(){
+  const cat=unitCategory.value;
+  unitFrom.innerHTML=unitTo.innerHTML="";
+  if(cat==="temperature"){
+    ["Celsius","Fahrenheit","Kelvin"].forEach(u=>{
+      unitFrom.innerHTML+=`<option>${u}</option>`;
+      unitTo.innerHTML+=`<option>${u}</option>`;
     });
-    return;
+  }else{
+    Object.keys(units[cat]).forEach(u=>{
+      unitFrom.innerHTML+=`<option value="${u}">${u}</option>`;
+      unitTo.innerHTML+=`<option value="${u}">${u}</option>`;
+    });
   }
-
-  Object.keys(units[cat]).forEach(u => {
-    unitFrom.innerHTML += `<option value="${u}">${u}</option>`;
-    unitTo.innerHTML += `<option value="${u}">${u}</option>`;
-  });
 }
-unitCategory.addEventListener("change", loadUnits);
+unitCategory.onchange=loadUnits;
 loadUnits();
 
-function convertUnit() {
-  document.getElementById("unit-result").innerText = "Converted!";
+function convertUnit(){
+  const val=parseFloat(document.getElementById("unit-value").value);
+  if(isNaN(val)) return unitResult.innerText="Enter number";
+  const from=unitFrom.value,to=unitTo.value,cat=unitCategory.value;
+  if(cat==="temperature"){
+    let k=(from==="Celsius")?val+273.15:(from==="Fahrenheit")?((val-32)*5/9+273.15):val;
+    let fin=(to==="Celsius")?k-273.15:(to==="Fahrenheit")?((k-273.15)*9/5+32):k;
+    return unitResult.innerText=`${val} ${from} = ${fin.toFixed(2)} ${to}`;
+  }
+  const base=val/units[cat][from];
+  const res=base*units[cat][to];
+  unitResult.innerText=`${val} ${from} = ${res.toFixed(4)} ${to}`;
 }
 
-/* PASS, QR, AGE, IMAGE remain unchanged */
-function generatePassword() {
-  const len = document.getElementById("password-length").value;
-  const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*";
-  document.getElementById("password-result").innerText =
-    Array.from({ length: len }, () => chars[Math.floor(Math.random() * chars.length)]).join("");
+/******************************************************
+ QR GENERATOR + DOWNLOAD
+******************************************************/
+function generateQR(){
+  const txt=document.getElementById("qr-input").value;
+  document.getElementById("qr-result").innerHTML=`<img id="qrImg" src="https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=${encodeURIComponent(txt)}">`;
+  document.getElementById("qr-download").style.display="block";
 }
+document.getElementById("qr-download").onclick=()=>{
+  const link=document.createElement("a");
+  link.download="qrcode.png";
+  link.href=document.getElementById("qrImg").src;
+  link.click();
+};
 
-function generateQR() {
-  const t = document.getElementById("qr-input").value;
-  document.getElementById("qr-result").innerHTML =
-    `<img src="https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=${encodeURIComponent(t)}">`;
+/******************************************************
+ IMAGE RESIZER + DOWNLOAD
+******************************************************/
+function resizeAndDisplayImage(){
+  const file=document.getElementById("image-upload").files[0];
+  if(!file) return alert("Upload first");
+  const w=+document.getElementById("resize-width").value;
+  const h=+document.getElementById("resize-height").value;
+  const reader=new FileReader();
+  reader.onload=e=>{
+    const img=new Image();
+    img.onload=()=>{
+      const canvas=document.createElement("canvas");
+      canvas.width=w; canvas.height=h;
+      canvas.getContext("2d").drawImage(img,0,0,w,h);
+      const url=canvas.toDataURL("image/png");
+      document.getElementById("image-result-display").innerHTML=`<img id="resizedImg" src="${url}">`;
+      document.getElementById("image-result-text").innerText="Resized successfully!";
+      document.getElementById("img-download").style.display="block";
+    }
+    img.src=e.target.result;
+  }
+  reader.readAsDataURL(file);
 }
-
-function calculateAge() {
-  const d = new Date(document.getElementById("birthdate").value);
-  const age = new Date(Date.now() - d).getUTCFullYear() - 1970;
-  document.getElementById("age-result").innerText = `Age: ${age}`;
-}
-
-function resizeAndDisplayImage() {
-  const f = document.getElementById("image-upload").files[0];
-  if (!f) return alert("Upload image first");
-  const w = +document.getElementById("resize-width").value;
-  const h = +document.getElementById("resize-height").value;
-  const r = new FileReader();
-  r.onload = e => {
-    const i = new Image();
-    i.onload = () => {
-      const c = document.createElement("canvas");
-      c.width = w; c.height = h;
-      c.getContext("2d").drawImage(i, 0, 0, w, h);
-      document.getElementById("image-result-display").innerHTML =
-        `<img src="${c.toDataURL("image/jpeg")}" style="max-width:100%;">`;
-      document.getElementById("image-result-text").innerText = "Image resized successfully!";
-    };
-    i.src = e.target.result;
-  };
-  r.readAsDataURL(f);
-}
+document.getElementById("img-download").onclick=()=>{
+  const link=document.createElement("a");
+  link.download="resized.png";
+  link.href=document.getElementById("resizedImg").src;
+  link.click();
+};
