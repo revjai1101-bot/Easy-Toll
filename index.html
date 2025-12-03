@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   <title>Toolify Hub – Smart Tools for Everyone</title>
+
   <link rel="stylesheet" href="styles.css">
 </head>
 
@@ -30,9 +31,8 @@
     <div class="tool-card" onclick="showTool('image')">🖼<p>Image</p></div>
   </section>
 
-  <!-- Currency -->
+  <!-- Currency Panel -->
   <section id="currency" class="tool-panel">
-    <div class="panel-content">
     <button class="back-btn" onclick="goBack()">← Back</button>
     <h2>Currency Converter</h2>
 
@@ -50,12 +50,10 @@
 
     <button id="convertBtn">Convert</button>
     <p id="currencyResult" class="result-text"></p>
-    </div>
   </section>
 
-  <!-- Unit -->
+  <!-- Unit Panel -->
   <section id="unit" class="tool-panel">
-    <div class="panel-content">
     <button class="back-btn" onclick="goBack()">← Back</button>
     <h2>Unit Converter</h2>
 
@@ -76,12 +74,10 @@
 
     <button onclick="convertUnit()">Convert Unit</button>
     <p id="unit-result" class="result-text"></p>
-    </div>
   </section>
 
-  <!-- Password -->
+  <!-- Password Panel -->
   <section id="password" class="tool-panel">
-    <div class="panel-content">
     <button class="back-btn" onclick="goBack()">← Back</button>
     <h2>Password Generator</h2>
 
@@ -90,25 +86,21 @@
 
     <button onclick="generatePassword()">Generate Password</button>
     <p id="password-result" class="result-text">Click 'Generate'</p>
-    </div>
   </section>
 
-  <!-- QR -->
+  <!-- QR Panel -->
   <section id="qr" class="tool-panel">
-    <div class="panel-content">
     <button class="back-btn" onclick="goBack()">← Back</button>
     <h2>QR Code Generator</h2>
 
     <input type="text" id="qr-input" placeholder="Enter text or URL">
 
     <button onclick="generateQR()">Generate QR Code</button>
-    <div id="qr-result" style="text-align: center; margin-top: 20px;"></div>
-    </div>
+    <div id="qr-result" style="text-align:center;margin-top:20px;"></div>
   </section>
 
-  <!-- Age -->
+  <!-- Age Panel -->
   <section id="age" class="tool-panel">
-    <div class="panel-content">
     <button class="back-btn" onclick="goBack()">← Back</button>
     <h2>Age Calculator</h2>
 
@@ -116,39 +108,22 @@
 
     <button onclick="calculateAge()">Calculate Age</button>
     <p id="age-result" class="result-text"></p>
-    </div>
   </section>
 
-  <!-- Image -->
+  <!-- Image Panel -->
   <section id="image" class="tool-panel">
-    <div class="panel-content">
     <button class="back-btn" onclick="goBack()">← Back</button>
     <h2>Image Resizer</h2>
 
-    <label>Choose Method:</label>
-    <select id="resize-mode">
-      <option value="dimension">Resize by Width & Height</option>
-      <option value="filesize">Resize by File Size</option>
-    </select>
-
-    <div id="dimension-controls">
-      <label>Width (px):</label>
-      <input type="number" id="resize-width" value="300">
-      <label>Height (px):</label>
-      <input type="number" id="resize-height" value="200">
-    </div>
-
-    <div id="filesize-controls" style="display:none;">
-      <label>Target Size (KB):</label>
-      <input type="number" id="resize-filesize" value="300">
-    </div>
-
     <input type="file" id="image-upload" accept="image/*">
+    <label for="resize-width">Width (px):</label>
+    <input type="number" id="resize-width" value="300">
+    <label for="resize-height">Height (px):</label>
+    <input type="number" id="resize-height" value="200">
 
-    <button onclick="resizeImage()">Resize Image</button>
+    <button onclick="resizeAndDisplayImage()">Resize Image</button>
     <p id="image-result-text" class="result-text"></p>
     <div id="image-result-display"></div>
-    </div>
   </section>
 
 </main>
