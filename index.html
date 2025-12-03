@@ -4,12 +4,14 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Toolify Hub – Smart Tools</title>
-  
+
+  <!-- AdSense main script (load once only) -->
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6408441237069178"
     crossorigin="anonymous"></script>
 
   <link rel="stylesheet" href="styles.css">
 </head>
+
 <body>
 
 <header class="site-header">
@@ -20,6 +22,18 @@
 </header>
 
 <main>
+
+  <!-- 🔥 HOME PAGE BANNER AD (Option A: Above tools grid) -->
+  <div style="margin:15px 0;">
+    <ins class="adsbygoogle"
+        style="display:block"
+        data-ad-client="ca-pub-6408441237069178"
+        data-ad-slot="5142973431"
+        data-ad-format="auto"
+        data-full-width-responsive="true"></ins>
+    <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+  </div>
+
   <input id="tool-search" class="search-input" placeholder="Search tools…">
 
   <section class="tools">
@@ -31,18 +45,29 @@
     <div class="tool-card" onclick="showTool('image')">🖼<p>Image</p></div>
   </section>
 
+  <!-- ========================================================= -->
+  <!-- CURRENCY TOOL -->
+  <!-- ========================================================= -->
   <section id="currency" class="tool-panel">
     <button class="back-btn" onclick="goBack()">← Back</button>
     <h2>Currency Converter</h2>
+
+    <!-- Currency Banner Ad -->
+    <div style="margin:15px 0;">
+      <ins class="adsbygoogle"
+          style="display:block"
+          data-ad-client="ca-pub-6408441237069178"
+          data-ad-slot="8828612160"
+          data-ad-format="auto"
+          data-full-width-responsive="true"></ins>
+      <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+    </div>
 
     <input type="number" id="amount" placeholder="Enter amount">
     <select id="fromCurrency"></select>
     <select id="toCurrency"></select>
     <button id="convertBtn">Convert</button>
     <p id="currencyResult" class="result-text"></p>
-
-    <div id="ad-currency-slot" style="margin: 15px 0; min-height: 100px;">
-        </div>
 
     <h3 class="rate-table-title">Money Changer Rates vs MYR 🇲🇾</h3>
     <div class="rates-table-wrap">
@@ -53,69 +78,142 @@
     </div>
   </section>
 
+  <!-- ========================================================= -->
+  <!-- UNIT TOOL -->
+  <!-- ========================================================= -->
   <section id="unit" class="tool-panel">
     <button class="back-btn" onclick="goBack()">← Back</button>
     <h2>Unit Converter</h2>
+
+    <!-- Unit Banner Ad -->
+    <div style="margin:15px 0;">
+      <ins class="adsbygoogle"
+          style="display:block"
+          data-ad-client="ca-pub-6408441237069178"
+          data-ad-slot="1212285528"
+          data-ad-format="auto"
+          data-full-width-responsive="true"></ins>
+      <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+    </div>
+
     <select id="unit-category">
       <option value="length">Length</option>
       <option value="weight">Weight</option>
       <option value="temperature">Temperature</option>
       <option value="speed">Speed</option>
     </select>
+
     <input id="unit-value" type="number" placeholder="Enter value">
     <select id="unit-from"></select>
-    <select id="unit-to"></select> 
+    <select id="unit-to"></select>
     <button onclick="convertUnit()">Convert</button>
     <p id="unit-result" class="result-text"></p>
-    
-    <div id="ad-unit-slot" style="margin: 15px 0; min-height: 100px;">
-        </div>
   </section>
 
-  <section id="qr" class="tool-panel">
-    <button class="back-btn" onclick="goBack()">← Back</button>
-    <h2>QR Code Generator</h2>
-    <input id="qr-input" placeholder="Enter text or URL">
-    <button onclick="generateQR()">Generate QR</button>
-    <div id="qr-result" style="text-align: center; margin-top: 20px;"></div>
-  </section>
-
+  <!-- ========================================================= -->
+  <!-- PASSWORD TOOL -->
+  <!-- ========================================================= -->
   <section id="password" class="tool-panel">
     <button class="back-btn" onclick="goBack()">← Back</button>
     <h2>Password Generator</h2>
+
+    <!-- Password Banner Ad -->
+    <div style="margin:15px 0;">
+      <ins class="adsbygoogle"
+          style="display:block"
+          data-ad-client="ca-pub-6408441237069178"
+          data-ad-slot="6224954969"
+          data-ad-format="auto"
+          data-full-width-responsive="true"></ins>
+      <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+    </div>
+
     <input type="number" id="password-length" value="12" min="8" max="32" placeholder="Length (8-32)">
     <button onclick="generatePassword()">Generate</button>
     <p id="password-result" class="result-text"></p>
   </section>
 
+  <!-- ========================================================= -->
+  <!-- QR TOOL -->
+  <!-- ========================================================= -->
+  <section id="qr" class="tool-panel">
+    <button class="back-btn" onclick="goBack()">← Back</button>
+    <h2>QR Code Generator</h2>
+
+    <!-- QR Banner Ad -->
+    <div style="margin:15px 0;">
+      <ins class="adsbygoogle"
+          style="display:block"
+         data-ad-client="ca-pub-6408441237069178"
+          data-ad-slot="8995406772"
+          data-ad-format="auto"
+          data-full-width-responsive="true"></ins>
+      <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+    </div>
+
+    <input id="qr-input" placeholder="Enter text or URL">
+    <button onclick="generateQR()">Generate</button>
+    <div id="qr-result" style="text-align:center; margin-top:20px;"></div>
+  </section>
+
+  <!-- ========================================================= -->
+  <!-- AGE TOOL -->
+  <!-- ========================================================= -->
   <section id="age" class="tool-panel">
     <button class="back-btn" onclick="goBack()">← Back</button>
     <h2>Age Calculator</h2>
+
+    <!-- Age Banner Ad -->
+    <div style="margin:15px 0;">
+      <ins class="adsbygoogle"
+          style="display:block"
+          data-ad-client="ca-pub-6408441237069178"
+          data-ad-slot="7586122181"
+          data-ad-format="auto"
+          data-full-width-responsive="true"></ins>
+      <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+    </div>
+
     <input type="date" id="birthdate">
     <button onclick="calculateAge()">Check</button>
     <p id="age-result" class="result-text"></p>
   </section>
 
+  <!-- ========================================================= -->
+  <!-- IMAGE TOOL -->
+  <!-- ========================================================= -->
   <section id="image" class="tool-panel">
     <button class="back-btn" onclick="goBack()">← Back</button>
     <h2>Image Resizer</h2>
+
+    <!-- Image Banner Ad -->
+    <div style="margin:15px 0;">
+      <ins class="adsbygoogle"
+          style="display:block"
+          data-ad-client="ca-pub-6408441237069178"
+          data-ad-slot="6033383273"
+          data-ad-format="auto"
+          data-full-width-responsive="true"></ins>
+      <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+    </div>
+
     <p>Upload an image and specify new dimensions below.</p>
-    
-    <input type="file" id="image-upload" accept="image/*" style="margin-bottom: 10px;">
-    
-    <label for="resize-width" style="display: block; margin-top: 10px;">New Width (px):</label>
+    <input type="file" id="image-upload" accept="image/*" style="margin-bottom:10px;">
+
+    <label for="resize-width" style="display:block; margin-top:10px;">New Width (px):</label>
     <input type="number" id="resize-width" placeholder="e.g. 800" value="800">
-    
-    <label for="resize-height" style="display: block; margin-top: 10px;">New Height (px):</label>
+
+    <label for="resize-height" style="display:block; margin-top:10px;">New Height (px):</label>
     <input type="number" id="resize-height" placeholder="e.g. 600" value="600">
-    
+
     <button onclick="resizeAndDisplayImage()">Resize Image</button>
-    
+
     <p id="image-result-text" class="result-text"></p>
-    <div id="image-result-display" style="text-align: center;"></div>
+    <div id="image-result-display" style="text-align:center;"></div>
   </section>
 
 </main>
 
-<script src="script.js"></script> </body>
+<script src="script.js"></script>
+</body>
 </html>
