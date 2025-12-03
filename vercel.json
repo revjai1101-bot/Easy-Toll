@@ -5,9 +5,10 @@
   "rewrites": [
     { "source": "/index.html", "destination": "/" }
   ],
+  // UPDATED SECTION BELOW
   "functions": {
     "api/*.js": {
-      "runtime": "nodejs18.x"
+      "runtime": "@vercel/node"
     }
   }
 }
