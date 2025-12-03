@@ -1,9 +1,4 @@
-* { 
-  margin: 0; 
-  padding: 0; 
-  box-sizing: border-box; 
-  font-family: Inter, sans-serif; 
-}
+* { margin: 0; padding: 0; box-sizing: border-box; font-family: Inter, sans-serif; }
 
 body {
   background: linear-gradient(160deg, #6a11cb, #2575fc);
@@ -28,8 +23,6 @@ main {
 .brand h1 { font-size: 28px; }
 .brand p { font-size: 14px; opacity: 0.8; }
 
-.ad-block { margin: 15px 0; }
-
 .search-input {
   width: 100%; padding: 14px;
   margin: 14px 0;
@@ -41,7 +34,7 @@ main {
 }
 .search-input::placeholder { color: rgba(255,255,255,0.6); }
 
-/******** CARDS ********/
+/******** Cards ********/
 .tools {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
@@ -58,140 +51,72 @@ main {
   cursor: pointer;
 }
 
-.tool-card:hover {
-  transform: translateY(-4px);
-  background: rgba(255,255,255,0.32);
-}
-
-.tool-card p {
-  margin-top: 8px;
-  font-size: 16px;
-  font-weight: 500;
-}
+.tool-card p { font-size:14px; margin-top:6px; }
 
 /******** PANELS ********/
 .tool-panel {
   position: fixed;
   inset: 0;
   background: #fff;
-  color: #222;
-  padding: 20px;
-  overflow-y: auto;
-  overscroll-behavior: contain; /* prevents scroll jump */
-  z-index: 20;
+  color: #111;
+  padding: 0;
   display: none;
+  overflow: visible; 
+  z-index: 20;
 }
 
-.back-btn {
-  background: transparent;
-  color: #6a11cb;
-  font-size: 18px;
-  border: none;
-  margin-bottom: 10px;
-  cursor: pointer;
+.panel-content {
+  padding: 20px;
+  height: calc(100vh - 60px);
+  overflow-y: auto;
 }
 
-/******** DROPDOWN FIX ********/
+/******** Dropdown fix ********/
 .currency-select-row {
   display: flex;
   gap: 10px;
   align-items: center;
-  position: relative;
-  padding-bottom: 30px; /* space for dropdown */
+  padding-bottom: 35px;
 }
 
-select {
-  width: 100%; 
-  padding: 12px;
-  margin: 8px 0;
-  border-radius: 8px;
-  border: 1px solid #ddd;
-  font-size: 16px;
-  color: #000;
-  background: #fff;
-  appearance: none;
-  position: relative;
-  z-index: 50;
-}
-
-select:focus {
-  outline: 2px solid #6a11cb;
-}
-
-/******** INPUTS + BUTTON ********/
-input {
+select, input {
   width: 100%; padding: 12px;
   margin: 8px 0;
   border-radius: 8px;
   border: 1px solid #ddd;
   font-size: 16px;
-  color: #000;
   background: #fff;
+  color: #000;
+  position: relative;
+  z-index: 50;
 }
 
 button {
-  width: 100%; padding: 14px;
-  margin-top: 15px;
-  border: none; 
-  color: #fff;
+  width: 100%;
+  padding: 14px;
+  margin-top: 12px;
+  border: none;
+  border-radius: 12px;
   font-weight: 700;
   font-size: 17px;
-  border-radius: 12px;
   background: linear-gradient(120deg,#6a11cb,#2575fc);
+  color: #fff;
   cursor: pointer;
 }
 
 .result-text {
   margin-top: 15px;
   padding: 10px;
-  font-size: 16px;
-  color: #111;
-  border-left: 5px solid #6a11cb;
-  background: #f0f8ff;
-  border-radius: 4px;
+  font-size: 15px;
+  background: #eef;
+  border-left: 4px solid #6a11cb;
 }
 
-/******** TABLE ********/
-.rate-table-title {
-  margin-top: 25px;
+.back-btn {
+  background: transparent;
   color: #6a11cb;
-  font-weight: 700;
+  border: none;
   font-size: 18px;
-}
-
-.rates-table-wrap {
-  background: #fff;
-  border-radius: 12px;
-  overflow: hidden;
-  border: 1px solid #eee;
-}
-
-.rates-table {
-  width: 100%;
-  border-collapse: collapse;
-}
-
-.rates-table th {
-  background: #6a11cb;
-  color: #fff;
-  padding: 12px;
-  text-align: left;
-}
-
-.rates-table td {
-  padding: 12px;
-  border-bottom: 1px solid #eee;
-}
-
-/******** FOOTER ********/
-.footer {
-  text-align:center;
-  padding:20px;
-  opacity:0.7;
-  margin-top:40px;
-}
-
-.footer a { 
-  color:#fff; 
-  text-decoration:underline; 
+  cursor: pointer;
+  padding-bottom: 12px;
 }
