@@ -3,14 +3,11 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
   <title>Toolify Hub – Smart Tools for Everyone</title>
-
   <link rel="stylesheet" href="styles.css">
 </head>
 
 <body>
-
 <header class="site-header">
   <div class="brand">
     <h1>🌀 Toolify Hub</h1>
@@ -19,7 +16,6 @@
 </header>
 
 <main>
-
   <input id="tool-search" class="search-input" placeholder="Search tools…">
 
   <section class="tools">
@@ -31,12 +27,11 @@
     <div class="tool-card" onclick="showTool('image')">🖼<p>Image</p></div>
   </section>
 
-  <!-- Currency Panel -->
+  <!-- Currency -->
   <section id="currency" class="tool-panel">
     <button class="back-btn" onclick="goBack()">← Back</button>
     <h2>Currency Converter</h2>
-
-    <input type="number" id="amount" placeholder="Enter amount">
+    <input type="number" id="amount" placeholder="Amount">
 
     <div class="currency-select-row">
       <select id="fromCurrency"></select>
@@ -52,11 +47,10 @@
     <p id="currencyResult" class="result-text"></p>
   </section>
 
-  <!-- Unit Panel -->
+  <!-- Unit -->
   <section id="unit" class="tool-panel">
     <button class="back-btn" onclick="goBack()">← Back</button>
     <h2>Unit Converter</h2>
-
     <input type="number" id="unit-value" placeholder="Enter value">
 
     <select id="unit-category">
@@ -72,64 +66,48 @@
       <select id="unit-to"></select>
     </div>
 
-    <button onclick="convertUnit()">Convert Unit</button>
+    <button onclick="convertUnit()">Convert</button>
     <p id="unit-result" class="result-text"></p>
-  </section>
-
-  <!-- Password Panel -->
-  <section id="password" class="tool-panel">
-    <button class="back-btn" onclick="goBack()">← Back</button>
-    <h2>Password Generator</h2>
-
-    <label for="password-length">Length:</label>
-    <input type="number" id="password-length" value="12" min="6" max="30">
-
-    <button onclick="generatePassword()">Generate Password</button>
-    <p id="password-result" class="result-text">Click 'Generate'</p>
   </section>
 
   <!-- QR -->
   <section id="qr" class="tool-panel">
     <button class="back-btn" onclick="goBack()">← Back</button>
     <h2>QR Code Generator</h2>
-
     <input type="text" id="qr-input" placeholder="Enter text or URL">
-
     <button onclick="generateQR()">Generate QR Code</button>
-    <div id="qr-result" style="text-align: center; margin-top: 20px;"></div>
+
+    <div id="qr-result" class="qr-box"></div>
+    <button id="qr-download" class="download-btn" style="display:none;">Download QR</button>
   </section>
 
   <!-- Age -->
   <section id="age" class="tool-panel">
     <button class="back-btn" onclick="goBack()">← Back</button>
     <h2>Age Calculator</h2>
-
     <input type="date" id="birthdate">
-
     <button onclick="calculateAge()">Calculate Age</button>
     <p id="age-result" class="result-text"></p>
   </section>
 
-  <!-- Image -->
+  <!-- Image Resizer -->
   <section id="image" class="tool-panel">
     <button class="back-btn" onclick="goBack()">← Back</button>
     <h2>Image Resizer</h2>
-
     <input type="file" id="image-upload" accept="image/*">
-    <label for="resize-width">Width (px):</label>
     <input type="number" id="resize-width" value="300">
-    <label for="resize-height">Height (px):</label>
     <input type="number" id="resize-height" value="200">
+    <button onclick="resizeAndDisplayImage()">Resize</button>
 
-    <button onclick="resizeAndDisplayImage()">Resize Image</button>
     <p id="image-result-text" class="result-text"></p>
     <div id="image-result-display"></div>
+    <button id="img-download" class="download-btn" style="display:none;">Download Image</button>
   </section>
 
 </main>
 
 <footer class="footer">
-  <p>© 2025 Toolify Hub — Smart Tools for Everyone</p>
+  © 2025 Toolify Hub
 </footer>
 
 <script src="script.js"></script>
