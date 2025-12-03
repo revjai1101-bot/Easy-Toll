@@ -7,7 +7,10 @@
 
   <meta name="description" content="Toolify Hub provides free smart tools including currency converter, unit converter, age calculator, password generator, QR code generator, and image resizer. Fast, simple, accurate, and free.">
 
-  <!-- Single AdSense Global Script -->
+  <!-- Tell AdSense + Google that homepage is root URL (not /index.html) -->
+  <link rel="canonical" href="https://easytoolilfy.com/">
+
+  <!-- One-time AdSense script (MUST only exist once) -->
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6408441237069178"
   crossorigin="anonymous"></script>
 
@@ -25,7 +28,7 @@
 
 <main>
 
-  <!-- Home Page Ad -->
+  <!-- HOME PAGE AD -->
   <div class="ad-block">
     <ins class="adsbygoogle"
          style="display:block"
@@ -47,12 +50,12 @@
     <div class="tool-card" onclick="showTool('image')">🖼<p>Image</p></div>
   </section>
 
-  <!-- Currency Converter -->
+  <!-- Currency Tool -->
   <section id="currency" class="tool-panel">
     <button class="back-btn" onclick="goBack()">← Back</button>
     <h2>Currency Converter</h2>
 
-    <!-- Currency Ad -->
+    <!-- Currency AD -->
     <div class="ad-block">
       <ins class="adsbygoogle"
            style="display:block"
@@ -79,12 +82,12 @@
     <p id="currencyResult" class="result-text"></p>
   </section>
 
-  <!-- Unit Converter -->
+  <!-- Unit Tool -->
   <section id="unit" class="tool-panel">
     <button class="back-btn" onclick="goBack()">← Back</button>
     <h2>Unit Converter</h2>
 
-    <!-- Unit Ad -->
+    <!-- Unit AD -->
     <div class="ad-block">
       <ins class="adsbygoogle"
            style="display:block"
@@ -114,12 +117,12 @@
     <p id="unit-result" class="result-text"></p>
   </section>
 
-  <!-- Password Generator -->
+  <!-- Password Tool -->
   <section id="password" class="tool-panel">
     <button class="back-btn" onclick="goBack()">← Back</button>
     <h2>Password Generator</h2>
 
-    <!-- Password Ad -->
+    <!-- Password AD -->
     <div class="ad-block">
       <ins class="adsbygoogle"
            style="display:block"
@@ -136,12 +139,12 @@
     <p id="password-result" class="result-text"></p>
   </section>
 
-  <!-- QR Code -->
+  <!-- QR Tool -->
   <section id="qr" class="tool-panel">
     <button class="back-btn" onclick="goBack()">← Back</button>
     <h2>QR Code Generator</h2>
 
-    <!-- QR Ad -->
+    <!-- QR AD -->
     <div class="ad-block">
       <ins class="adsbygoogle"
            style="display:block"
@@ -154,16 +157,16 @@
 
     <input type="text" id="qr-input" placeholder="Enter text or URL">
     <button onclick="generateQR()">Generate</button>
-    <div id="qr-result" class="qr-box"></div>
+    <div id="qr-result"></div>
     <button id="qr-download" class="download-btn" style="display:none;">Download QR</button>
   </section>
 
-  <!-- Age Calculator -->
+  <!-- Age Tool -->
   <section id="age" class="tool-panel">
     <button class="back-btn" onclick="goBack()">← Back</button>
     <h2>Age Calculator</h2>
 
-    <!-- Age Ad -->
+    <!-- Age AD -->
     <div class="ad-block">
       <ins class="adsbygoogle"
            style="display:block"
@@ -174,18 +177,17 @@
       <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
     </div>
 
-    <label for="birthdate">Enter Birth Date:</label>
     <input type="date" id="birthdate">
     <button onclick="calculateAge()">Calculate</button>
     <p id="age-result" class="result-text"></p>
   </section>
 
-  <!-- Image Resizer -->
+  <!-- Image Tool -->
   <section id="image" class="tool-panel">
     <button class="back-btn" onclick="goBack()">← Back</button>
     <h2>Image Resizer</h2>
 
-    <!-- Image Ad -->
+    <!-- Image AD -->
     <div class="ad-block">
       <ins class="adsbygoogle"
            style="display:block"
