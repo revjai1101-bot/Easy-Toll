@@ -53,6 +53,84 @@ const topCurrencies = [
   "COP","CLP","CZK","RON","ILS","MAD","MYR"
 ];
 
+// 1 MYR = value in that currency (approximate but realistic)
+const myrBaseRates = {
+  MYR: 1,
+  USD: 0.2120,
+  EUR: 0.1945,
+  GBP: 0.1650,
+  JPY: 31.40,
+  AUD: 0.3180,
+  CAD: 0.2890,
+  SGD: 0.2855,
+  CHF: 0.1870,
+  THB: 7.70,
+  IDR: 3300,
+  CNY: 1.50,
+  HKD: 1.65,
+  NZD: 0.3420,
+  SAR: 0.7950,
+  AED: 0.7800,
+  INR: 17.65,
+  KRW: 275,
+  PHP: 11.75,
+  VND: 5000,
+  BDT: 23,
+  PKR: 59,
+  MMK: 450,
+  BRL: 1.10,
+  ZAR: 3.85,
+  SEK: 2.25,
+  NOK: 2.22,
+  DKK: 1.45,
+  PLN: 0.84,
+  TRY: 6.9,
+  HUF: 72,
+  EGP: 13.5,
+  QAR: 0.77,
+  KWD: 0.065,
+  BHD: 0.08,
+  OMR: 0.08,
+  LKR: 70,
+  NPR: 29,
+  KES: 33,
+  RUB: 19,
+  MXN: 3.50,
+  ARS: 190,
+  NGN: 180,
+  COP: 850,
+  CLP: 230,
+  CZK: 4.5,
+  RON: 0.96,
+  ILS: 0.78,
+  MAD: 2.2
+};
+
+function getFxRate(from, to) {
+  if (from === to) return 1;
+
+  const rFrom = myrBaseRates[from];
+  const rTo   = myrBaseRates[to];
+
+  if (!rFrom || !rTo) {
+    return null; // unsupported currency in our offline table
+  }
+
+  // 1 MYR = rX (currency X)
+  // From -> MYR -> To
+  if (from === "MYR") {
+    // MYR -> other
+    return rTo;
+  } else if (to === "MYR") {
+    // other -> MYR
+    return 1 / rFrom;
+  } else {
+    // other -> MYR -> other
+    const oneFromInMYR = 1 / rFrom;     // 1 unit of FROM in MYR
+    return oneFromInMYR * rTo;          // then MYR -> TO
+  }
+}
+
 const fromCurrency = document.getElementById("fromCurrency");
 const toCurrency   = document.getElementById("toCurrency");
 const currencyResult = document.getElementById("currencyResult");
@@ -123,18 +201,17 @@ if (convertBtn) {
       return;
     }
 
-    const fromIndex = topCurrencies.indexOf(fromCurrency.value);
-    const toIndex   = topCurrencies.indexOf(toCurrency.value);
-    if (fromIndex === -1 || toIndex === -1) {
-      currencyResult.innerText = "Currency not supported.";
+    const fromCode = fromCurrency.value;
+    const toCode   = toCurrency.value;
+
+    const rate = getFxRate(fromCode, toCode);
+    if (rate === null) {
+      currencyResult.innerText = "Selected currency pair is not supported in offline rates.";
       return;
     }
 
-    // Simple offline pseudo-rate based on index
-    const rate = (toIndex + 1) / (fromIndex + 1);
     const converted = amt * rate;
-
-    currencyResult.innerText = `${amt} ${fromCurrency.value} ≈ ${converted.toFixed(2)} ${toCurrency.value}`;
+    currencyResult.innerText = `${amt} ${fromCode} ≈ ${converted.toFixed(4)} ${toCode}`;
   });
 }
 
