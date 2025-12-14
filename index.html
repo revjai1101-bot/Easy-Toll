@@ -5,12 +5,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Toolify Hub – Smart Tools for Everyone</title>
 
-  <meta name="description" content="Toolify Hub provides free smart tools including currency converter, unit converter, age calculator, password generator, QR code generator, and image resizer. Fast, simple, accurate, and free.">
-
-  <!-- Tell AdSense + Google that homepage is root URL (not /index.html) -->
+  <!-- SEO -->
+  <meta name="description" content="Toolify Hub provides smart tools including currency converter, unit converter, QR generator, image resizer and more. Fast, simple and free.">
   <link rel="canonical" href="https://easytoolilfy.com/">
 
-  <!-- One-time AdSense script (MUST only exist once) -->
+  <!-- AdSense -->
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6408441237069178"
   crossorigin="anonymous"></script>
 
@@ -28,7 +27,78 @@
 
 <main>
 
-  <!-- HOME PAGE AD -->
+  <!-- IMPORTANT: ADD VALUE CONTENT (for AdSense approval) -->
+  <section class="content-block" id="intro">
+    <h2>Free online tools for everyday tasks</h2>
+    <p>
+      Toolify Hub is a simple and fast website that provides free tools you can use directly in your browser.
+      We focus on utilities that help with daily work, study, business, and personal tasks — without requiring
+      any installation or account signup.
+    </p>
+    <p>
+      You can convert currencies, convert units, generate strong passwords, create QR codes, calculate age, and
+      resize images in just a few taps. Toolify Hub is designed to be mobile-friendly, lightweight, and easy to use.
+      We continuously improve accuracy, performance, and usability to give users a smooth experience.
+    </p>
+
+    <div class="quick-links">
+      <a class="quick-link" href="about.html">About</a>
+      <a class="quick-link" href="contact.html">Contact</a>
+      <a class="quick-link" href="privacy.html">Privacy</a>
+      <a class="quick-link" href="terms.html">Terms</a>
+    </div>
+  </section>
+
+  <input id="tool-search" class="search-input" placeholder="Search tools…">
+
+  <!-- HOME TOOL GRID -->
+  <section class="tools" aria-label="Tool list">
+    <div class="tool-card" onclick="showTool('currency')">💱<p>Currency</p></div>
+    <div class="tool-card" onclick="showTool('unit')">📏<p>Unit</p></div>
+    <div class="tool-card" onclick="showTool('password')">🔐<p>Password</p></div>
+    <div class="tool-card" onclick="showTool('qr')">🔳<p>QR Code</p></div>
+    <div class="tool-card" onclick="showTool('age')">🎂<p>Age</p></div>
+    <div class="tool-card" onclick="showTool('image')">🖼<p>Image</p></div>
+  </section>
+
+  <!-- TOOL DESCRIPTIONS (adds real value for approval) -->
+  <section class="tool-info">
+    <h3>What you can do on Toolify Hub</h3>
+
+    <div class="tool-info-grid">
+      <div class="tool-info-card">
+        <h4>Currency Converter</h4>
+        <p>Convert between popular currencies using live exchange rates (with fallback). Useful for travel, shopping, and international payments.</p>
+      </div>
+
+      <div class="tool-info-card">
+        <h4>Unit Converter</h4>
+        <p>Convert measurements such as length, weight, temperature, and speed. Helpful for students, engineers, and everyday calculations.</p>
+      </div>
+
+      <div class="tool-info-card">
+        <h4>Password Generator</h4>
+        <p>Create strong random passwords quickly to improve account security. Great for new accounts or password updates.</p>
+      </div>
+
+      <div class="tool-info-card">
+        <h4>QR Code Generator</h4>
+        <p>Generate QR codes for text or URLs and download the QR image. Useful for sharing links, menus, and contact details.</p>
+      </div>
+
+      <div class="tool-info-card">
+        <h4>Age Calculator</h4>
+        <p>Calculate age from a birthdate instantly. Useful for forms, records, and personal tracking.</p>
+      </div>
+
+      <div class="tool-info-card">
+        <h4>Image Resizer</h4>
+        <p>Resize images to a specific width and height and download the resized result. Useful for forms, profile pictures, and uploads.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- HOME AD (moved BELOW content + tools so it’s not “ads-first”) -->
   <div class="ad-block">
     <ins class="adsbygoogle"
          style="display:block"
@@ -39,21 +109,15 @@
     <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
   </div>
 
-  <input id="tool-search" class="search-input" placeholder="Search tools…">
-
-  <section class="tools">
-    <div class="tool-card" onclick="showTool('currency')">💱<p>Currency</p></div>
-    <div class="tool-card" onclick="showTool('unit')">📏<p>Unit</p></div>
-    <div class="tool-card" onclick="showTool('password')">🔐<p>Password</p></div>
-    <div class="tool-card" onclick="showTool('qr')">🔳<p>QR Code</p></div>
-    <div class="tool-card" onclick="showTool('age')">🎂<p>Age</p></div>
-    <div class="tool-card" onclick="showTool('image')">🖼<p>Image</p></div>
-  </section>
-
-  <!-- Currency Tool -->
+  <!-- ============================= -->
+  <!-- CURRENCY TOOL -->
+  <!-- ============================= -->
   <section id="currency" class="tool-panel">
     <button class="back-btn" onclick="goBack()">← Back</button>
     <h2>Currency Converter</h2>
+    <p class="tool-desc">
+      Convert between currencies using live exchange rates. Results are for general reference — please verify for critical transactions.
+    </p>
 
     <!-- Currency AD -->
     <div class="ad-block">
@@ -70,24 +134,44 @@
 
     <div class="currency-select-row">
       <select id="fromCurrency"></select>
-      <button id="favFromBtn" class="fav-btn">⭐</button>
+      <button id="favFromBtn" class="fav-btn" type="button" title="Favorite From">⭐</button>
     </div>
 
     <div class="currency-select-row">
       <select id="toCurrency"></select>
-      <button id="favToBtn" class="fav-btn">⭐</button>
+      <button id="favToBtn" class="fav-btn" type="button" title="Favorite To">⭐</button>
     </div>
 
-    <button id="convertBtn">Convert</button>
+    <button id="convertBtn" type="button">Convert</button>
     <p id="currencyResult" class="result-text"></p>
+
+    <h3 class="rate-table-title">Live Money Changer Rates vs MYR 🇲🇾</h3>
+
+    <div class="rate-table-wrap">
+      <table class="rate-table">
+        <thead>
+          <tr>
+            <th>Currency</th>
+            <th>1 MYR = ?</th>
+          </tr>
+        </thead>
+        <tbody id="ratesBody">
+          <tr><td colspan="2">Loading…</td></tr>
+        </tbody>
+      </table>
+    </div>
   </section>
 
-  <!-- Unit Tool -->
+  <!-- ============================= -->
+  <!-- UNIT CONVERTER -->
+  <!-- ============================= -->
   <section id="unit" class="tool-panel">
     <button class="back-btn" onclick="goBack()">← Back</button>
     <h2>Unit Converter</h2>
+    <p class="tool-desc">
+      Convert length, weight, temperature and speed. This tool is intended for quick calculations and general use.
+    </p>
 
-    <!-- Unit AD -->
     <div class="ad-block">
       <ins class="adsbygoogle"
            style="display:block"
@@ -109,113 +193,86 @@
 
     <div class="currency-select-row">
       <select id="unit-from"></select>
-      <p>to</p>
+      <p class="inline-text">to</p>
       <select id="unit-to"></select>
     </div>
 
-    <button id="unit-convert-btn">Convert</button>
+    <button id="unit-convert-btn" type="button">Convert</button>
     <p id="unit-result" class="result-text"></p>
   </section>
 
-  <!-- Password Tool -->
-  <section id="password" class="tool-panel">
-    <button class="back-btn" onclick="goBack()">← Back</button>
-    <h2>Password Generator</h2>
-
-    <!-- Password AD -->
-    <div class="ad-block">
-      <ins class="adsbygoogle"
-           style="display:block"
-           data-ad-client="ca-pub-6408441237069178"
-           data-ad-slot="6224954969"
-           data-ad-format="auto"
-           data-full-width-responsive="true"></ins>
-      <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
-    </div>
-
-    <label for="password-length">Length:</label>
-    <input type="number" id="password-length" value="12" min="6">
-    <button onclick="generatePassword()">Generate</button>
-    <p id="password-result" class="result-text"></p>
-  </section>
-
-  <!-- QR Tool -->
+  <!-- QR TOOL -->
   <section id="qr" class="tool-panel">
     <button class="back-btn" onclick="goBack()">← Back</button>
     <h2>QR Code Generator</h2>
+    <p class="tool-desc">
+      Create a QR code for any text or URL and download it as an image. Great for sharing links quickly.
+    </p>
 
-    <!-- QR AD -->
-    <div class="ad-block">
-      <ins class="adsbygoogle"
-           style="display:block"
-           data-ad-client="ca-pub-6408441237069178"
-           data-ad-slot="8995406772"
-           data-ad-format="auto"
-           data-full-width-responsive="true"></ins>
-      <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
-    </div>
-
-    <input type="text" id="qr-input" placeholder="Enter text or URL">
-    <button onclick="generateQR()">Generate</button>
+    <input id="qr-input" placeholder="Enter text or URL">
+    <button type="button" onclick="generateQR()">Generate</button>
     <div id="qr-result"></div>
-    <button id="qr-download" class="download-btn" style="display:none;">Download QR</button>
+
+    <!-- ADDED (required by your JS) -->
+    <button id="qr-download" type="button" style="display:none;">Download QR</button>
   </section>
 
-  <!-- Age Tool -->
+  <!-- PASSWORD TOOL -->
+  <section id="password" class="tool-panel">
+    <button class="back-btn" onclick="goBack()">← Back</button>
+    <h2>Password Generator</h2>
+    <p class="tool-desc">
+      Generate a strong random password instantly. Avoid reusing passwords across multiple accounts.
+    </p>
+
+    <input type="number" id="password-length" value="12" min="6">
+    <button type="button" onclick="generatePassword()">Generate</button>
+    <p id="password-result" class="result-text"></p>
+  </section>
+
+  <!-- AGE TOOL -->
   <section id="age" class="tool-panel">
     <button class="back-btn" onclick="goBack()">← Back</button>
     <h2>Age Calculator</h2>
-
-    <!-- Age AD -->
-    <div class="ad-block">
-      <ins class="adsbygoogle"
-           style="display:block"
-           data-ad-client="ca-pub-6408441237069178"
-           data-ad-slot="7586122181"
-           data-ad-format="auto"
-           data-full-width-responsive="true"></ins>
-      <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
-    </div>
+    <p class="tool-desc">
+      Calculate your age from your birthdate. Useful for forms, records, and personal reference.
+    </p>
 
     <input type="date" id="birthdate">
-    <button onclick="calculateAge()">Calculate</button>
+    <button type="button" onclick="calculateAge()">Calculate</button>
     <p id="age-result" class="result-text"></p>
   </section>
 
-  <!-- Image Tool -->
+  <!-- IMAGE RESIZER -->
   <section id="image" class="tool-panel">
     <button class="back-btn" onclick="goBack()">← Back</button>
     <h2>Image Resizer</h2>
-
-    <!-- Image AD -->
-    <div class="ad-block">
-      <ins class="adsbygoogle"
-           style="display:block"
-           data-ad-client="ca-pub-6408441237069178"
-           data-ad-slot="6033383273"
-           data-ad-format="auto"
-           data-full-width-responsive="true"></ins>
-      <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
-    </div>
+    <p class="tool-desc">
+      Resize an image to a specific width and height and download the resized output.
+    </p>
 
     <input type="file" id="image-upload" accept="image/*">
     <label>Width (px):</label>
     <input type="number" id="resize-width" value="300">
     <label>Height (px):</label>
     <input type="number" id="resize-height" value="200">
-    <button onclick="resizeAndDisplayImage()">Resize</button>
+    <button type="button" onclick="resizeAndDisplayImage()">Resize</button>
     <p id="image-result-text" class="result-text"></p>
     <div id="image-result-display"></div>
-    <button id="img-download" class="download-btn" style="display:none;">Download Image</button>
+
+    <!-- ADDED (required by your JS) -->
+    <button id="img-download" type="button" style="display:none;">Download Image</button>
   </section>
 
 </main>
 
 <footer class="footer">
   <p>© 2025 Toolify Hub — Smart Tools for Everyone</p>
-  <p>
+  <p class="footer-links">
+    <a href="about.html">About</a> •
+    <a href="contact.html">Contact</a> •
     <a href="privacy.html">Privacy Policy</a> •
-    <a href="terms.html">Terms &amp; Conditions</a>
+    <a href="terms.html">Terms & Conditions</a>
   </p>
 </footer>
 
