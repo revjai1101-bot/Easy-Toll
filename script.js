@@ -1,37 +1,60 @@
 "use strict";
 
-/* =========================
-   SPA NAVIGATION (HASH)
-   ========================= */
+/* =============================
+   SPA NAVIGATION + FOOTER CONTROL
+   ============================= */
 
 function showTool(id) {
   document.querySelectorAll(".tool-panel").forEach(p => p.style.display = "none");
+
   const panel = document.getElementById(id);
   if (panel) panel.style.display = "block";
+
   window.location.hash = id;
+
+  const footer = document.querySelector(".footer");
+  if (footer) footer.style.display = "none";
+
   window.scrollTo(0, 0);
 }
 
 function goBack() {
-  history.back();
+  document.querySelectorAll(".tool-panel").forEach(p => p.style.display = "none");
+
+  history.pushState("", document.title, window.location.pathname + window.location.search);
+
+  const footer = document.querySelector(".footer");
+  if (footer) footer.style.display = "block";
+
+  window.scrollTo(0, 0);
 }
 
 function handleHashChange() {
   const id = window.location.hash.replace("#", "");
-  document.querySelectorAll(".tool-panel").forEach(p => p.style.display = "none");
-  if (id) {
-    const panel = document.getElementById(id);
-    if (panel) panel.style.display = "block";
+  const footer = document.querySelector(".footer");
+
+  if (!id) {
+    document.querySelectorAll(".tool-panel").forEach(p => p.style.display = "none");
+    if (footer) footer.style.display = "block";
+    return;
   }
+
+  document.querySelectorAll(".tool-panel").forEach(p => p.style.display = "none");
+  const panel = document.getElementById(id);
+  if (panel) panel.style.display = "block";
+
+  if (footer) footer.style.display = "none";
+
+  window.scrollTo(0, 0);
 }
 
 window.addEventListener("hashchange", handleHashChange);
-// Initial load
 handleHashChange();
 
-/* =========================
+/* =============================
    SEARCH FILTER
-   ========================= */
+   ============================= */
+
 const toolSearch = document.getElementById("tool-search");
 if (toolSearch) {
   toolSearch.addEventListener("input", function () {
@@ -42,9 +65,9 @@ if (toolSearch) {
   });
 }
 
-/* =========================
-   CURRENCY CONVERTER
-   ========================= */
+/* =============================
+   CURRENCY CONVERTER (LIVE + FALLBACK)
+   ============================= */
 
 const topCurrencies = [
   "USD","EUR","GBP","JPY","AUD","CAD","SGD","CHF","THB","IDR","CNY","HKD","NZD","SAR",
@@ -53,379 +76,282 @@ const topCurrencies = [
   "COP","CLP","CZK","RON","ILS","MAD","MYR"
 ];
 
-// 1 MYR = value in that currency (approximate but realistic)
-const myrBaseRates = {
-  MYR: 1,
-  USD: 0.2120,
-  EUR: 0.1945,
-  GBP: 0.1650,
-  JPY: 31.40,
-  AUD: 0.3180,
-  CAD: 0.2890,
-  SGD: 0.2855,
-  CHF: 0.1870,
-  THB: 7.70,
-  IDR: 3300,
-  CNY: 1.50,
-  HKD: 1.65,
-  NZD: 0.3420,
-  SAR: 0.7950,
-  AED: 0.7800,
-  INR: 17.65,
-  KRW: 275,
-  PHP: 11.75,
-  VND: 5000,
-  BDT: 23,
-  PKR: 59,
-  MMK: 450,
-  BRL: 1.10,
-  ZAR: 3.85,
-  SEK: 2.25,
-  NOK: 2.22,
-  DKK: 1.45,
-  PLN: 0.84,
-  TRY: 6.9,
-  HUF: 72,
-  EGP: 13.5,
-  QAR: 0.77,
-  KWD: 0.065,
-  BHD: 0.08,
-  OMR: 0.08,
-  LKR: 70,
-  NPR: 29,
-  KES: 33,
-  RUB: 19,
-  MXN: 3.50,
-  ARS: 190,
-  NGN: 180,
-  COP: 850,
-  CLP: 230,
-  CZK: 4.5,
-  RON: 0.96,
-  ILS: 0.78,
-  MAD: 2.2
+// Offline fallback table
+const fallbackMYR = {
+  MYR: 1, USD: 0.2120, EUR: 0.1945, GBP: 0.1650, JPY: 31.40, AUD: 0.3180,
+  CAD: 0.2890, SGD: 0.2855, CHF: 0.1870, THB: 7.70, IDR: 3300, CNY: 1.50,
+  HKD: 1.65, NZD: 0.3420, SAR: 0.7950, AED: 0.7800, INR: 17.65, KRW: 275,
+  PHP: 11.75, VND: 5000, BDT: 23, PKR: 59, MMK: 450, BRL: 1.10, ZAR: 3.85,
+  SEK: 2.25, NOK: 2.22, DKK: 1.45, PLN: 0.84, TRY: 6.9, HUF: 72, EGP: 13.5,
+  QAR: 0.77, KWD: 0.065, BHD: 0.08, OMR: 0.08, LKR: 70, NPR: 29, KES: 33,
+  RUB: 19, MXN: 3.50, ARS: 190, NGN: 180, COP: 850, CLP: 230, CZK: 4.5,
+  RON: 0.96, ILS: 0.78, MAD: 2.2
 };
 
-function getFxRate(from, to) {
-  if (from === to) return 1;
+let LIVE_RATES = null;
 
-  const rFrom = myrBaseRates[from];
-  const rTo   = myrBaseRates[to];
+const ratesBody = document.getElementById("ratesBody");
 
-  if (!rFrom || !rTo) {
-    return null; // unsupported currency in our offline table
-  }
+function buildRatesTable() {
+  if (!ratesBody) return;
 
-  // 1 MYR = rX (currency X)
-  // From -> MYR -> To
-  if (from === "MYR") {
-    // MYR -> other
-    return rTo;
-  } else if (to === "MYR") {
-    // other -> MYR
-    return 1 / rFrom;
-  } else {
-    // other -> MYR -> other
-    const oneFromInMYR = 1 / rFrom;     // 1 unit of FROM in MYR
-    return oneFromInMYR * rTo;          // then MYR -> TO
-  }
+  const rates = LIVE_RATES || fallbackMYR;
+  ratesBody.innerHTML = "";
+
+  const sorted = Object.keys(rates).sort();
+  sorted.forEach(code => {
+    const val = Number(rates[code]);
+    ratesBody.innerHTML += `
+      <tr>
+        <td>${code}</td>
+        <td>${isFinite(val) ? val.toFixed(4) : "-"}</td>
+      </tr>
+    `;
+  });
 }
 
-const fromCurrency = document.getElementById("fromCurrency");
-const toCurrency   = document.getElementById("toCurrency");
-const currencyResult = document.getElementById("currencyResult");
+async function loadRates() {
+  try {
+    const res = await fetch("https://v6.exchangerate-api.com/v6/f1d5ca13ec0d67c2ef78b766/latest/MYR");
+    const json = await res.json();
+    LIVE_RATES = json.conversion_rates;
+  } catch {
+    LIVE_RATES = fallbackMYR;
+  } finally {
+    buildRatesTable();
+  }
+}
+loadRates();
 
+// Dropdown elements
+const fromSel = document.getElementById("fromCurrency");
+const toSel   = document.getElementById("toCurrency");
+const resultBox = document.getElementById("currencyResult");
+
+// Favorites
 let favFrom = JSON.parse(localStorage.getItem("fav_from") || "[]");
-let favTo   = JSON.parse(localStorage.getItem("fav_to")   || "[]");
+let favTo   = JSON.parse(localStorage.getItem("fav_to") || "[]");
 
-function buildCurrencySelect(target, favorites) {
-  if (!target) return;
+function buildCurrencyOptions(target, favList) {
   target.innerHTML = "";
-  // Favorites on top
-  favorites.forEach(code => {
-    target.innerHTML += `<option value="${code}">⭐ ${code}</option>`;
+
+  favList.forEach(c => {
+    target.innerHTML += `<option value="${c}">⭐ ${c}</option>`;
   });
-  // Rest
-  topCurrencies.forEach(code => {
-    if (!favorites.includes(code)) {
-      target.innerHTML += `<option value="${code}">${code}</option>`;
+
+  topCurrencies.forEach(c => {
+    if (!favList.includes(c)) {
+      target.innerHTML += `<option value="${c}">${c}</option>`;
     }
   });
 }
 
-function refreshCurrencyDropdowns() {
-  buildCurrencySelect(fromCurrency, favFrom);
-  buildCurrencySelect(toCurrency, favTo);
+function refreshDropdowns() {
+  if (fromSel) buildCurrencyOptions(fromSel, favFrom);
+  if (toSel) buildCurrencyOptions(toSel, favTo);
 
-  // Some sensible defaults
-  if (fromCurrency && !fromCurrency.value) fromCurrency.value = "MYR";
-  if (toCurrency && !toCurrency.value) toCurrency.value = "USD";
+  if (fromSel && !fromSel.value) fromSel.value = "MYR";
+  if (toSel && !toSel.value) toSel.value = "USD";
 }
 
-refreshCurrencyDropdowns();
+refreshDropdowns();
 
-// Favorite buttons
+// Fav buttons
 const favFromBtn = document.getElementById("favFromBtn");
 const favToBtn   = document.getElementById("favToBtn");
 
 if (favFromBtn) {
   favFromBtn.addEventListener("click", () => {
-    if (!fromCurrency) return;
-    const cur = fromCurrency.value;
-    favFrom = favFrom.includes(cur) ? favFrom.filter(c => c !== cur) : [...favFrom, cur];
+    const c = fromSel.value;
+    favFrom = favFrom.includes(c) ? favFrom.filter(x => x !== c) : [...favFrom, c];
     localStorage.setItem("fav_from", JSON.stringify(favFrom));
-    refreshCurrencyDropdowns();
+    refreshDropdowns();
   });
 }
 
 if (favToBtn) {
   favToBtn.addEventListener("click", () => {
-    if (!toCurrency) return;
-    const cur = toCurrency.value;
-    favTo = favTo.includes(cur) ? favTo.filter(c => c !== cur) : [...favTo, cur];
+    const c = toSel.value;
+    favTo = favTo.includes(c) ? favTo.filter(x => x !== c) : [...favTo, c];
     localStorage.setItem("fav_to", JSON.stringify(favTo));
-    refreshCurrencyDropdowns();
+    refreshDropdowns();
   });
 }
 
-const amountInput = document.getElementById("amount");
-const convertBtn  = document.getElementById("convertBtn");
-
-if (convertBtn) {
-  convertBtn.addEventListener("click", () => {
-    if (!amountInput || !fromCurrency || !toCurrency || !currencyResult) return;
-
-    const amt = parseFloat(amountInput.value);
-    if (isNaN(amt)) {
-      currencyResult.innerText = "Please enter a valid amount.";
-      return;
-    }
-
-    const fromCode = fromCurrency.value;
-    const toCode   = toCurrency.value;
-
-    const rate = getFxRate(fromCode, toCode);
-    if (rate === null) {
-      currencyResult.innerText = "Selected currency pair is not supported in offline rates.";
-      return;
-    }
-
-    const converted = amt * rate;
-    currencyResult.innerText = `${amt} ${fromCode} ≈ ${converted.toFixed(4)} ${toCode}`;
-  });
-}
-
-/* =========================
-   UNIT CONVERTER
-   ========================= */
-
-const unitCategory = document.getElementById("unit-category");
-const unitFrom     = document.getElementById("unit-from");
-const unitTo       = document.getElementById("unit-to");
-const unitValue    = document.getElementById("unit-value");
-const unitResult   = document.getElementById("unit-result");
-const unitConvertBtn = document.getElementById("unit-convert-btn");
-
-const units = {
-  length: { m: 1, cm: 100, mm: 1000, km: 0.001, inch: 39.37, ft: 3.28 },
-  weight: { kg: 1, g: 1000, mg: 1000000, lb: 2.20462, oz: 35.274 },
-  temperature: "special",
-  speed: { "m/s": 1, "km/h": 3.6, mph: 2.23694 }
-};
-
-function loadUnits() {
-  if (!unitCategory || !unitFrom || !unitTo) return;
-  const cat = unitCategory.value;
-  unitFrom.innerHTML = "";
-  unitTo.innerHTML   = "";
-
-  if (cat === "temperature") {
-    ["Celsius", "Fahrenheit", "Kelvin"].forEach(u => {
-      unitFrom.innerHTML += `<option>${u}</option>`;
-      unitTo.innerHTML   += `<option>${u}</option>`;
-    });
-  } else {
-    Object.keys(units[cat]).forEach(u => {
-      unitFrom.innerHTML += `<option value="${u}">${u}</option>`;
-      unitTo.innerHTML   += `<option value="${u}">${u}</option>`;
-    });
-  }
-}
-
-if (unitCategory) {
-  unitCategory.addEventListener("change", loadUnits);
-  loadUnits(); // initial
-}
-
-function convertUnit() {
-  if (!unitCategory || !unitFrom || !unitTo || !unitValue || !unitResult) return;
-
-  const cat  = unitCategory.value;
-  const from = unitFrom.value;
-  const to   = unitTo.value;
-  const v    = parseFloat(unitValue.value);
-
-  if (isNaN(v)) {
-    unitResult.innerText = "Please enter a number.";
+document.getElementById("convertBtn")?.addEventListener("click", () => {
+  const amt = parseFloat(document.getElementById("amount").value);
+  if (isNaN(amt)) {
+    resultBox.innerText = "Enter a valid amount.";
     return;
   }
 
-  if (cat === "temperature") {
-    let kelvin;
+  const from = fromSel.value;
+  const to = toSel.value;
 
-    if (from === "Celsius")      kelvin = v + 273.15;
-    else if (from === "Fahrenheit") kelvin = (v - 32) * 5/9 + 273.15;
-    else                          kelvin = v; // Kelvin
+  const rates = LIVE_RATES || fallbackMYR;
+
+  let myrValue = (from === "MYR") ? amt : amt / rates[from];
+  let final = (to === "MYR") ? myrValue : myrValue * rates[to];
+
+  resultBox.innerText = `${amt} ${from} ≈ ${final.toFixed(4)} ${to}`;
+});
+
+/* =============================
+   UNIT CONVERTER
+   ============================= */
+
+const unitCategory = document.getElementById("unit-category");
+const unitFrom = document.getElementById("unit-from");
+const unitTo = document.getElementById("unit-to");
+const unitVal = document.getElementById("unit-value");
+const unitResult = document.getElementById("unit-result");
+
+const units = {
+  length: { m:1, cm:100, mm:1000, km:0.001, inch:39.37, ft:3.28 },
+  weight: { kg:1, g:1000, mg:1000000, lb:2.20462, oz:35.274 },
+  temperature: "special",
+  speed: { "m/s":1, "km/h":3.6, mph:2.23694 }
+};
+
+function loadUnits() {
+  const c = unitCategory.value;
+  unitFrom.innerHTML = "";
+  unitTo.innerHTML = "";
+
+  if (c === "temperature") {
+    ["Celsius","Fahrenheit","Kelvin"].forEach(u=>{
+      unitFrom.innerHTML += `<option>${u}</option>`;
+      unitTo.innerHTML += `<option>${u}</option>`;
+    });
+  } else {
+    Object.keys(units[c]).forEach(u=>{
+      unitFrom.innerHTML += `<option>${u}</option>`;
+      unitTo.innerHTML += `<option>${u}</option>`;
+    });
+  }
+}
+unitCategory?.addEventListener("change", loadUnits);
+loadUnits();
+
+document.getElementById("unit-convert-btn")?.addEventListener("click", () => {
+  const c = unitCategory.value;
+  const from = unitFrom.value;
+  const to = unitTo.value;
+  const v = parseFloat(unitVal.value);
+
+  if (isNaN(v)) { unitResult.innerText = "Enter a value."; return; }
+
+  if (c === "temperature") {
+    let k;
+
+    if (from === "Celsius") k = v + 273.15;
+    else if (from === "Fahrenheit") k = (v - 32) * 5/9 + 273.15;
+    else k = v;
 
     let final;
-    if (to === "Celsius")        final = kelvin - 273.15;
-    else if (to === "Fahrenheit")final = (kelvin - 273.15) * 9/5 + 32;
-    else                         final = kelvin;
+    if (to === "Celsius") final = k - 273.15;
+    else if (to === "Fahrenheit") final = (k - 273.15) * 9/5 + 32;
+    else final = k;
 
     unitResult.innerText = `${v} ${from} = ${final.toFixed(2)} ${to}`;
     return;
   }
 
-  const base = v / units[cat][from];
-  const final = base * units[cat][to];
+  const base = v / units[c][from];
+  const final = base * units[c][to];
   unitResult.innerText = `${v} ${from} = ${final.toFixed(4)} ${to}`;
-}
+});
 
-if (unitConvertBtn) {
-  unitConvertBtn.addEventListener("click", convertUnit);
-}
-
-/* =========================
+/* =============================
    PASSWORD GENERATOR
-   ========================= */
+   ============================= */
 
-function generatePassword() {
-  const lengthInput = document.getElementById("password-length");
-  const resultBox   = document.getElementById("password-result");
-  if (!lengthInput || !resultBox) return;
-
-  const len = parseInt(lengthInput.value, 10) || 12;
+window.generatePassword = function () {
+  const len = parseInt(document.getElementById("password-length").value) || 12;
   const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*";
-  let pass = "";
-  for (let i = 0; i < len; i++) {
-    pass += chars.charAt(Math.floor(Math.random() * chars.length));
-  }
-  resultBox.innerText = pass;
-}
-window.generatePassword = generatePassword; // for inline onclick
+  let out = "";
+  for (let i = 0; i < len; i++) out += chars[Math.floor(Math.random()*chars.length)];
+  document.getElementById("password-result").innerText = out;
+};
 
-/* =========================
+/* =============================
    QR GENERATOR + DOWNLOAD
-   ========================= */
+   ============================= */
 
-function generateQR() {
-  const input = document.getElementById("qr-input");
-  const resultDiv = document.getElementById("qr-result");
-  const dlBtn = document.getElementById("qr-download");
-  if (!input || !resultDiv || !dlBtn) return;
+window.generateQR = function () {
+  const val = document.getElementById("qr-input").value.trim();
+  const out = document.getElementById("qr-result");
+  const btn = document.getElementById("qr-download");
 
-  const text = input.value.trim();
-  if (!text) {
-    resultDiv.innerHTML = "Please enter some text.";
-    dlBtn.style.display = "none";
+  if (!val) {
+    out.innerHTML = "Enter text.";
+    if (btn) btn.style.display = "none";
     return;
   }
 
-  const url = `https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=${encodeURIComponent(text)}`;
-  resultDiv.innerHTML = `<img id="qr-image" src="${url}" alt="QR Code">`;
-  dlBtn.style.display = "block";
-}
-window.generateQR = generateQR; // for inline onclick
+  const url = `https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=${encodeURIComponent(val)}`;
+  out.innerHTML = `<img id="qr-image" src="${url}" alt="QR Code">`;
+  if (btn) btn.style.display = "block";
+};
 
-const qrDownloadBtn = document.getElementById("qr-download");
-if (qrDownloadBtn) {
-  qrDownloadBtn.addEventListener("click", () => {
-    const img = document.getElementById("qr-image");
-    if (!img) return;
-    const link = document.createElement("a");
-    link.href = img.src;
-    link.download = "qrcode.png";
-    link.click();
-  });
-}
+document.getElementById("qr-download")?.addEventListener("click", ()=>{
+  const img = document.getElementById("qr-image");
+  if (!img) return;
+  const link = document.createElement("a");
+  link.href = img.src;
+  link.download = "qrcode.png";
+  link.click();
+});
 
-/* =========================
+/* =============================
    AGE CALCULATOR
-   ========================= */
+   ============================= */
 
-function calculateAge() {
-  const birthInput = document.getElementById("birthdate");
+window.calculateAge = function () {
+  const birth = new Date(document.getElementById("birthdate").value);
   const out = document.getElementById("age-result");
-  if (!birthInput || !out) return;
-
-  const birth = new Date(birthInput.value);
-  if (!birthInput.value || isNaN(birth.getTime())) {
-    out.innerText = "Please choose a valid date.";
-    return;
-  }
-
+  if (isNaN(birth.getTime())) { out.innerText="Select a date."; return; }
   const diff = Date.now() - birth.getTime();
-  const age  = new Date(diff).getUTCFullYear() - 1970;
-  out.innerText = `Age: ${age} years`;
-}
-window.calculateAge = calculateAge; // for inline onclick
+  out.innerText = `Age: ${new Date(diff).getUTCFullYear() - 1970} years`;
+};
 
-/* =========================
-   IMAGE RESIZER + DOWNLOAD
-   ========================= */
+/* =============================
+   IMAGE RESIZER
+   ============================= */
 
-function resizeAndDisplayImage() {
-  const fileInput = document.getElementById("image-upload");
-  const widthInput = document.getElementById("resize-width");
-  const heightInput = document.getElementById("resize-height");
-  const resultText = document.getElementById("image-result-text");
-  const resultDiv  = document.getElementById("image-result-display");
-  const dlBtn      = document.getElementById("img-download");
+window.resizeAndDisplayImage = function () {
+  const file = document.getElementById("image-upload").files[0];
+  const w = parseInt(document.getElementById("resize-width").value);
+  const h = parseInt(document.getElementById("resize-height").value);
+  const out = document.getElementById("image-result-display");
+  const msg = document.getElementById("image-result-text");
+  const dl = document.getElementById("img-download");
 
-  if (!fileInput || !widthInput || !heightInput || !resultText || !resultDiv || !dlBtn) return;
-
-  const file = fileInput.files[0];
-  if (!file) {
-    alert("Please upload an image first.");
-    return;
-  }
-
-  const w = parseInt(widthInput.value, 10);
-  const h = parseInt(heightInput.value, 10);
-  if (!w || !h) {
-    resultText.innerText = "Please enter valid width and height.";
-    return;
-  }
+  if (!file) { alert("Upload an image."); return; }
+  if (!w || !h) { msg.innerText="Invalid size."; return; }
 
   const reader = new FileReader();
-  reader.onload = function (e) {
+  reader.onload = e => {
     const img = new Image();
-    img.onload = function () {
-      const canvas = document.createElement("canvas");
-      canvas.width = w;
-      canvas.height = h;
-      const ctx = canvas.getContext("2d");
-      ctx.drawImage(img, 0, 0, w, h);
-
-      const url = canvas.toDataURL("image/png");
-      resultDiv.innerHTML = `<img id="resized-image" src="${url}" style="max-width:100%;border-radius:10px;margin-top:10px;">`;
-      resultText.innerText = "Image resized successfully!";
-      dlBtn.style.display = "block";
+    img.onload = ()=>{
+      const c = document.createElement("canvas");
+      c.width = w; c.height = h;
+      c.getContext("2d").drawImage(img,0,0,w,h);
+      const url = c.toDataURL("image/png");
+      out.innerHTML = `<img id="resized-image" src="${url}" style="max-width:100%;" alt="Resized image">`;
+      msg.innerText = "Image resized!";
+      if (dl) dl.style.display="block";
     };
     img.src = e.target.result;
   };
   reader.readAsDataURL(file);
-}
-window.resizeAndDisplayImage = resizeAndDisplayImage; // for inline onclick
+};
 
-const imgDownloadBtn = document.getElementById("img-download");
-if (imgDownloadBtn) {
-  imgDownloadBtn.addEventListener("click", () => {
-    const img = document.getElementById("resized-image");
-    if (!img) return;
-    const link = document.createElement("a");
-    link.href = img.src;
-    link.download = "resized-image.png";
-    link.click();
-  });
-}
+document.getElementById("img-download")?.addEventListener("click", () => {
+  const img = document.getElementById("resized-image");
+  if (!img) return;
+  const link = document.createElement("a");
+  link.href = img.src;
+  link.download = "resized-image.png";
+  link.click();
+});
