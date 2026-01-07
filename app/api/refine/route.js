@@ -8,7 +8,7 @@ export async function POST(req) {
     // Use the model that works for your account
     const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
     // USE THIS MODEL FOR 2026:
-const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash-lite" });
+const model = genAI.getGenerativeModel({ model: "gemma-3-27b-it" });
 
     let systemInstruction = "";
 
