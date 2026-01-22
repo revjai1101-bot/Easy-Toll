@@ -162,17 +162,17 @@ export default function Home() {
           </div>
 
           {/* ======================================================== */}
-          {/* EDUCATIONAL RESOURCE CENTER                              */}
+          {/* THE KNOWLEDGE HUB (MASSIVE CONTENT SECTION)              */}
           {/* ======================================================== */}
           <article className="mt-24 border-t border-gray-800 pt-16 max-w-6xl mx-auto text-gray-300">
             
             <div className="text-center mb-16">
-              <h2 className="text-4xl font-bold text-white mb-4">Documentation Standards</h2>
-              <p className="text-xl text-gray-400">Industry Guidelines for Technical Communication</p>
+              <h2 className="text-4xl font-bold text-white mb-4">Documentation Standards & Best Practices</h2>
+              <p className="text-xl text-gray-400">The Ultimate Guide for System Engineers and Support Professionals</p>
             </div>
 
-            {/* Glossary Term */}
-            <div className="mb-16 bg-gray-800 p-8 rounded-xl border border-gray-700 shadow-xl">
+            {/* 1. KEY CONCEPTS & DEFINITION */}
+            <div className="mb-20 bg-gray-800 p-8 rounded-xl border border-gray-700 shadow-xl">
               <div className="flex items-baseline gap-4 mb-4">
                 <h3 className="text-3xl font-bold text-white">note refine</h3>
                 <span className="text-gray-500 italic text-xl">verb</span>
@@ -200,95 +200,115 @@ export default function Home() {
               </div>
             </div>
 
-            {/* Recommended Certifications (NEW) */}
+            {/* 2. REAL WORLD STORIES (NEW: HIGH VALUE) */}
             <div className="mb-20">
-              <h3 className="text-2xl font-bold text-white mb-8 border-b border-gray-700 pb-4">Recommended Learning Paths</h3>
+               <h3 className="text-2xl font-bold text-white mb-6 border-l-4 border-red-500 pl-4">Case Studies: The Cost of Poor Documentation</h3>
+               <p className="mb-8 text-gray-400">History is filled with expensive disasters caused not by bad code, but by bad communication. These stories highlight why tools like NoteRefiner are critical for mission-critical environments.</p>
+               
+               <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                  {/* Story 1 */}
+                  <div className="bg-gray-800 p-6 rounded-lg border border-gray-700 hover:border-red-500 transition">
+                     <h4 className="text-xl font-bold text-white mb-2">1. The Mars Climate Orbiter ($327M Loss)</h4>
+                     <p className="text-sm text-gray-400 mb-4 italic">September 1999</p>
+                     <p className="text-sm leading-relaxed mb-4">
+                        NASA lost a $327 million spacecraft because of a simple documentation error. One engineering team used <strong>Metric units</strong> (Newtons) while another used <strong>Imperial units</strong> (Pounds-force) in their software specifications. 
+                     </p>
+                     <p className="text-sm font-bold text-red-400">
+                        The Lesson: Standardized formats save lives (and millions of dollars). Ambiguity in units or error codes is unacceptable in engineering.
+                     </p>
+                  </div>
+
+                  {/* Story 2 */}
+                  <div className="bg-gray-800 p-6 rounded-lg border border-gray-700 hover:border-red-500 transition">
+                     <h4 className="text-xl font-bold text-white mb-2">2. The Knight Capital Glitch ($440M Loss)</h4>
+                     <p className="text-sm text-gray-400 mb-4 italic">August 2012</p>
+                     <p className="text-sm leading-relaxed mb-4">
+                        In just 45 minutes, Knight Capital Group lost $440 million due to a failed deployment. An engineer forgot to copy new code to one of the eight servers because the <strong>deployment manual was outdated</strong> and unstructured.
+                     </p>
+                     <p className="text-sm font-bold text-red-400">
+                        The Lesson: Checklists and clear "Steps to Reproduce" are not optional. They must be generated accurately every time.
+                     </p>
+                  </div>
+               </div>
+            </div>
+
+            {/* 3. STATISTICS & FACTS (NEW) */}
+            <div className="mb-20 bg-blue-900/20 p-8 rounded-xl border border-blue-900/50">
+               <h3 className="text-2xl font-bold text-white mb-8 text-center">Did You Know?</h3>
+               <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
+                  <div>
+                     <div className="text-4xl font-black text-blue-400 mb-2">19%</div>
+                     <p className="text-sm text-gray-300">of a knowledge worker's week is spent just <strong>searching</strong> for information and reading internal docs (McKinsey).</p>
+                  </div>
+                  <div>
+                     <div className="text-4xl font-black text-blue-400 mb-2">$5k</div>
+                     <p className="text-sm text-gray-300">is the estimated annual cost per employee due to productivity loss from "Knowledge Barriers" and poor documentation.</p>
+                  </div>
+                  <div>
+                     <div className="text-4xl font-black text-blue-400 mb-2">40%</div>
+                     <p className="text-sm text-gray-300">of IT incidents are caused by <strong>Change Management</strong> errors, often due to poor handover notes between shifts.</p>
+                  </div>
+               </div>
+            </div>
+
+            {/* 4. MOTIVATION: THE "TOIL" PROBLEM (NEW) */}
+            <div className="mb-20">
+               <h3 className="text-2xl font-bold text-white mb-6">Ending the Burnout of "Toil"</h3>
+               <div className="flex flex-col md:flex-row items-center gap-8">
+                  <div className="w-full md:w-1/2">
+                     <p className="text-gray-300 leading-relaxed mb-4">
+                        In Site Reliability Engineering (SRE), Google defines <strong>"Toil"</strong> as work that is manual, repetitive, automated-able, and devoid of enduring value. 
+                     </p>
+                     <p className="text-gray-300 leading-relaxed mb-4">
+                        Formatting Jira tickets, cleaning up meeting minutes, and rewriting email updates are the definition of Toil. It drains your mental energy (Cognitive Load), leaving you with less brainpower for solving complex server issues.
+                     </p>
+                     <p className="text-white font-bold border-l-4 border-green-500 pl-4">
+                        NoteRefiner is an Anti-Toil Tool. By automating the formatting, you reclaim your focus for high-value engineering.
+                     </p>
+                  </div>
+                  <div className="w-full md:w-1/2 bg-gray-800 p-6 rounded-lg border border-gray-700">
+                     <h4 className="text-lg font-bold text-white mb-3">The "Broken Telephone" Effect</h4>
+                     <ul className="space-y-4 text-sm text-gray-400">
+                        <li className="flex items-center gap-3">
+                           <span className="bg-red-900 text-red-300 px-2 py-1 rounded text-xs">Support</span>
+                           <span>"User says internet is slow." (Vague)</span>
+                        </li>
+                        <li className="flex items-center gap-3">
+                           <span className="bg-yellow-900 text-yellow-300 px-2 py-1 rounded text-xs">QA Team</span>
+                           <span>"Testing internet speed... seems fine?" (Confusion)</span>
+                        </li>
+                        <li className="flex items-center gap-3">
+                           <span className="bg-green-900 text-green-300 px-2 py-1 rounded text-xs">NoteRefiner</span>
+                           <span className="text-white font-bold">"Latency > 500ms detected on API Gateway US-East." (Actionable)</span>
+                        </li>
+                     </ul>
+                  </div>
+               </div>
+            </div>
+
+            {/* 5. RECOMMENDED LEARNING PATHS */}
+            <div className="mb-20">
+              <h3 className="text-2xl font-bold text-white mb-8 border-b border-gray-700 pb-4">Career Growth Resources</h3>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                 <a href="https://grow.google/certificates/it-support/" target="_blank" rel="noopener noreferrer" className="block group">
                   <div className="bg-gray-800 p-6 rounded-lg border border-gray-700 hover:border-blue-500 transition h-full flex flex-col">
-                    <div className="text-blue-500 font-bold text-lg mb-2 group-hover:underline">Google IT Support Professional Certificate &rarr;</div>
-                    <p className="text-sm text-gray-400 flex-1">Master the fundamentals of IT support, including troubleshooting, customer service, and system administration documentation.</p>
+                    <div className="text-blue-500 font-bold text-lg mb-2 group-hover:underline">Google IT Support Cert &rarr;</div>
+                    <p className="text-sm text-gray-400 flex-1">Master the fundamentals of IT troubleshooting and standard documentation practices.</p>
                   </div>
                 </a>
                 <a href="https://aws.amazon.com/certification/certified-cloud-practitioner/" target="_blank" rel="noopener noreferrer" className="block group">
                   <div className="bg-gray-800 p-6 rounded-lg border border-gray-700 hover:border-orange-500 transition h-full flex flex-col">
-                    <div className="text-orange-500 font-bold text-lg mb-2 group-hover:underline">AWS Certified Cloud Practitioner &rarr;</div>
-                    <p className="text-sm text-gray-400 flex-1">Learn the cloud concepts that NoteRefiner helps you document, including EC2, S3, and standard architectural diagrams.</p>
+                    <div className="text-orange-500 font-bold text-lg mb-2 group-hover:underline">AWS Cloud Practitioner &rarr;</div>
+                    <p className="text-sm text-gray-400 flex-1">Learn the cloud terminology required for accurate server logging and reporting.</p>
                   </div>
                 </a>
                 <a href="https://www.comptia.org/certifications/network" target="_blank" rel="noopener noreferrer" className="block group">
                   <div className="bg-gray-800 p-6 rounded-lg border border-gray-700 hover:border-red-500 transition h-full flex flex-col">
                     <div className="text-red-500 font-bold text-lg mb-2 group-hover:underline">CompTIA Network+ &rarr;</div>
-                    <p className="text-sm text-gray-400 flex-1">Understand the networking protocols (TCP/IP, DNS) often cited in the logs you refine with our tool.</p>
+                    <p className="text-sm text-gray-400 flex-1">Understand the networking protocols (TCP/IP, DNS) cited in technical logs.</p>
                   </div>
                 </a>
               </div>
-            </div>
-
-            {/* Latest Insights / Blog Section (NEW) */}
-            <div className="mb-20">
-               <h3 className="text-2xl font-bold text-white mb-8">Latest Insights</h3>
-               <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                  
-                  {/* Article 1 */}
-                  <article className="bg-gray-800 rounded-xl overflow-hidden shadow-lg border border-gray-700">
-                    <div className="p-8">
-                      <div className="text-xs font-bold text-blue-400 mb-2 uppercase tracking-wide">Best Practices</div>
-                      <h4 className="text-xl font-bold text-white mb-3">The "5 C's" of Technical Writing</h4>
-                      <p className="text-gray-400 text-sm mb-4 leading-relaxed">
-                        In System Support, "clarity" is a requirement, not a luxury. The 5 C's framework—Clarity, Conciseness, Completeness, Correctness, and Consistency—ensures your tickets are actionable. A vague report like "Login failed" wastes hours, whereas "Login returns 404 on Chrome" is solved in minutes.
-                      </p>
-                      <span className="text-sm text-gray-500">Read time: 4 mins</span>
-                    </div>
-                  </article>
-
-                  {/* Article 2 */}
-                  <article className="bg-gray-800 rounded-xl overflow-hidden shadow-lg border border-gray-700">
-                    <div className="p-8">
-                      <div className="text-xs font-bold text-green-400 mb-2 uppercase tracking-wide">Career Growth</div>
-                      <h4 className="text-xl font-bold text-white mb-3">Why Senior Engineers Write More</h4>
-                      <p className="text-gray-400 text-sm mb-4 leading-relaxed">
-                        Influence happens through writing. Junior engineers focus on code; Senior engineers focus on Design Docs, RFCs, and Incident Reports. Mastering the art of asynchronous communication is the fastest path to promotion in distributed engineering teams.
-                      </p>
-                      <span className="text-sm text-gray-500">Read time: 5 mins</span>
-                    </div>
-                  </article>
-
-               </div>
-            </div>
-
-            {/* SRE & Incident Management Section */}
-            <div className="mb-16">
-               <h3 className="text-2xl font-bold text-white mb-6">SRE & Incident Management</h3>
-               <p className="mb-6 text-gray-400 leading-relaxed">
-                 In Site Reliability Engineering (SRE), documentation reduces <strong>MTTR (Mean Time To Recovery)</strong>. NoteRefiner streamlines the communication flow during critical outages.
-               </p>
-               
-               <div className="space-y-6">
-                  <div className="flex flex-col md:flex-row gap-6 border border-gray-700 p-6 rounded-lg bg-gray-900/50">
-                     <div className="w-full md:w-1/4">
-                        <span className="text-4xl font-black text-blue-500 opacity-50">01</span>
-                        <h4 className="text-lg font-bold text-white mt-2">Detection & Triage</h4>
-                     </div>
-                     <div className="w-full md:w-3/4">
-                        <p className="text-sm text-gray-300">
-                           Engineers often scribble rough notes during alerts. NoteRefiner converts these into a structured <strong>Incident Timeline</strong> for post-mortem analysis.
-                        </p>
-                     </div>
-                  </div>
-
-                  <div className="flex flex-col md:flex-row gap-6 border border-gray-700 p-6 rounded-lg bg-gray-900/50">
-                     <div className="w-full md:w-1/4">
-                        <span className="text-4xl font-black text-purple-500 opacity-50">02</span>
-                        <h4 className="text-lg font-bold text-white mt-2">Root Cause Analysis</h4>
-                     </div>
-                     <div className="w-full md:w-3/4">
-                        <p className="text-sm text-gray-300">
-                           Precise language is vital for "5 Whys" analysis. Our KB Article mode documents the exact chain of events to prevent future recurrence.
-                        </p>
-                     </div>
-                  </div>
-               </div>
             </div>
 
           </article>
