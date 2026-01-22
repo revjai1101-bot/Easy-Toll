@@ -287,8 +287,9 @@ export default function Home() {
                       <p className="text-xs text-gray-500 uppercase tracking-wide">For: Tech Writers, Onboarding</p>
                    </div>
                    <div className="w-full md:w-2/3">
+                      {/* FIX: Replaced '>' with '&gt;' to fix Vercel build error */}
                       <p className="text-sm mb-2">
-                        When you solve a difficult problem, you should document it. This mode creates a "Problem > Solution" article suitable for Confluence or Notion. It focuses on clarity and searchability.
+                        When you solve a difficult problem, you should document it. This mode creates a "Problem &gt; Solution" article suitable for Confluence or Notion. It focuses on clarity and searchability.
                       </p>
                       <p className="text-sm text-gray-400 italic">"Use this to document the solution to a recurring server error."</p>
                    </div>
